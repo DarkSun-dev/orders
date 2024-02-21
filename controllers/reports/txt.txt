@@ -1,0 +1,139 @@
+const stream = require('./stream')
+var PdfPrinter = require('pdfmake')
+const path = require('path')
+
+exports.invoice = async () => {
+    var fonts = {
+        Courier: {
+            normal: 'Courier',
+            bold: 'Courier-Bold',
+            italics: 'Courier-Oblique',
+            bolditalics: 'Courier-BoldOblique'
+        },
+        Helvetica: {
+            normal: 'Helvetica',
+            bold: 'Helvetica-Bold',
+            italics: 'Helvetica-Oblique',
+            bolditalics: 'Helvetica-BoldOblique'
+        },
+        Times: {
+            normal: 'Times-Roman',
+            bold: 'Times-Bold',
+            italics: 'Times-Italic',
+            bolditalics: 'Times-BoldItalic'
+        },
+        Symbol: {
+            normal: 'Symbol'
+        },
+        ZapfDingbats: {
+            normal: 'ZapfDingbats'
+        }
+    };
+
+    var printer = new PdfPrinter(fonts);
+
+    var docDefinition = {
+        pageSize: 'A4',
+        content: [
+            { text: '____________________________________________________________________________________________', fontSize: 10 },
+            {
+                image: path.join(__dirname, 'img/logo.jpg'),
+                width: 170,
+                height: 170,
+                margin: [5, 5] 
+            },
+            { text: 'web-site: www.doms.ac.mz', fontSize: 10, margin: [10, 11] },
+            { text: 'email: suporte@doms.ac', fontSize: 10, margin: [10, 13] },
+
+            {
+                columns: [
+                    {
+                        // auto-sized columns have their widths based on their content
+                        width: 'auto',
+                        text: ''
+                    },
+                    {
+                        // star-sized columns fill the remaining space
+                        // if there's more than one star-column, available width is divided equally
+                        width: '*',
+                        text: ''
+                    },
+                    {
+                        // fixed width
+                        width: 100,
+                        text: ''
+                    },
+                    {
+                        // % width
+                        width: '30%',
+                        text: "Cliente", fontSize: 12, bold: true, margin: [0, -100]
+                    }
+                ],
+                // optional space between columns
+                columnGap: 10
+            },
+
+            {
+                columns: [
+                    {
+                        // auto-sized columns have their widths based on their content
+                        width: 'auto',
+                        text: ''
+                    },
+                    {
+                        // star-sized columns fill the remaining space
+                        // if there's more than one star-column, available width is divided equally
+                        width: '*',
+                        text: ''
+                    },
+                    {
+                        // fixed width
+                        width: 100,
+                        text: ''
+                    },
+                    {
+                        // % width
+                        width: '30%',
+                        text: "Estrada Nacional N7, B.Matema\nTelefone: xxx-xx\nFax: xxxx", fontSize: 10, margin: [0, 0]
+                    }
+                ],
+                // optional space between columns
+                columnGap: 10
+            },
+
+            { text: '\n\n\n\n\n' },
+            { text: '___________________________________\n\n        (Assinatura & Carrimbo)', fontSize: 10 },
+
+        ],
+        defaultStyle: {
+            font: 'Helvetica'
+        }
+    };
+
+    var pdfDoc = printer.createPdfKitDocument(docDefinition);
+    let writeStream = new stream.WritableBufferStream();
+    pdfDoc.pipe(writeStream);
+
+    pdfDoc.end()
+    return new Promise((resolve, reject) => {
+        const callback = () => {
+            resolve(writeStream.toBuffer())
+        }
+        writeStream.on('finish', callback)
+        //writeStream.end(callback)
+    }
+    )
+}
+
+async function produceRef(bi) {
+    const b = bi
+    const d = b.charAt(0)
+    const d1 = b.charAt(9)
+    const d2 = b.charAt(10)
+    const d3 = b.charAt(11)
+    const d4 = b.charAt(12)
+    const codigo = 'ref00' + d1 + d2 + d3 + d4 + d + '@2kdomwriter'
+    return new Promise((resolve, reject) => {
+        resolve(codigo)
+    })
+}
