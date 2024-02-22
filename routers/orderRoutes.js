@@ -15,6 +15,8 @@ router.post('/getInvoiceReport', reportController.invoiceReport)
 
 router.post('/facture', reportController.factura)
 
+router.post('/balance', reportController.balance)
+
 router.post('/createService', operationController.addService)
 router.post('/ordeService', operationController.ordeService)
 router.post('/createClient', clientController.addClient)
@@ -28,6 +30,9 @@ router.get('/getClients', clientController.getClients)
 
 router.get('/getOrdes/:id', clientController.getOrdes)
 
-router.get('/rangeDate', reportController.rangeReport)
+router.post('/rangeDate', reportController.rangeReport)
+router.post('/anyReport', reportController.anyReport)
+
+
 
 module.exports = router
