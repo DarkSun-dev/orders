@@ -57,7 +57,7 @@ exports.facture = async (data) => {
                 margin: [0, 0, 0, 0],
             },
             {
-                text: 'Cotação',
+                text: 'FACTURA \n PRO-FORMA',
                 color: '#333333',
                 fontSize: 11,
                 fontSize: 28,
@@ -68,7 +68,7 @@ exports.facture = async (data) => {
             '\n\n',
             {
                 lineHeight: 1.20,
-                text: 'Cotação No.: 256 \n Data: 15/02/2024',
+                text: ` Data: ${new Date().toLocaleDateString('pt-PT')} \n Quote No.:`,
                 fontSize: 11,
                 color: '#333333',
                 alignment: 'right',
@@ -98,28 +98,13 @@ exports.facture = async (data) => {
                     }
                 ]
             },
-            {
-                columns: [
-                    {
-                        table : {
-                            headerRows : 0,
-                            widths: ['*'],
-                            body : [
-                                [''],
-                                ['']
-                            ]
-                        },
-                        layout : 'lightHorizontalLines'
-                    }
-                ]
-            },
             '\n',
             { text: `Subtotal: ${data.total}.00 MT \n IVA: ${data.total * 0.16}.00 MT`, margin: [0, 10], alignment: 'right', fontSize: 11, },
             { text: `Total: ${(data.total * 0.16) + data.total}.00 MT \n Balance Due: ${(data.total * 0.16) + data.total}.00 MT`, bold: true, margin: [0, 0], alignment: 'right', fontSize: 11, },
             '\n\n\n',
-            { text: 'Please contact us for more information about payment options. \n Thank you for your business', bold: true, margin: [20, 0], fontSize: 11, },
+            { text: 'Please contact us for more information about payment options.', bold: true, margin: [0, 0], fontSize: 11, },
             '\n',
-            { text: 'Moza Conta: 2678621910001 \n NIB: 00340000 2678621910166', margin: [10, 0], alignment: 'right', fontSize: 11, },
+            { text: 'Moza Conta: 2678621910001 NIB: 00340000 2678621910166', margin: [0, 0], fontSize: 11, },
         ],
         styles: {
             notesTitle: {

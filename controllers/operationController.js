@@ -1,6 +1,7 @@
 const factory = require('./handlerFactory')
 const Ordem = require('../models/ordemModel')
 const Item = require('../models/itemModel')
+const fs = require('fs')
 
 exports.ordeService = factory.createOne(Ordem)
 exports.addService = factory.createOne(Item)
@@ -17,3 +18,20 @@ exports.removeOrdem = factory.deleteOne(Ordem)
 exports.endOrdem = factory.updateOne(Ordem)
 exports.getServices = factory.getAll(Item)
 exports.removeService = factory.deleteOne(Item)
+
+/*
+async function backup() {
+    const doc = await Ordem.find()
+    const data = {
+        data: doc
+    }
+    try {
+        fs.writeFileSync('ordens.json', JSON.stringify(data));
+        console.log('Done writing to file.');
+    }
+    catch(err) {
+        console.log('Error writing to file', err)
+    }
+}
+backup() 
+*/

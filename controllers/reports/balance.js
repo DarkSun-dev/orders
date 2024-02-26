@@ -64,9 +64,6 @@ exports.balance = async (data) => {
                 alignment: 'right',
                 absolutePosition: { x: 0, y: 70 },
             },
-            {
-                text: 'Datas:'
-            },
             '\n\n',
             {
                 columns: [

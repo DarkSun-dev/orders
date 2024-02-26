@@ -5,7 +5,9 @@ const myReportc = require('./reports/facture')
 const myReportd = require('./reports/balance')
 
 exports.report = async (req, res) => {
+    console.log(req.body);
     var setter = []
+    var row = ""
     setter.push([
         {
             text: 'ITEMS',
@@ -15,7 +17,7 @@ exports.report = async (req, res) => {
             textTransform: 'uppercase',
         },
         {
-            text: '',
+            text: req.body.class === 'a' ? 'Preço' : '',
             border: [false, true, false, true],
             alignment: 'right',
             fillColor: '#eaf2f5',
@@ -25,15 +27,18 @@ exports.report = async (req, res) => {
     ])
 
     for (let index = 0; index < req.body.designation.length; index++) {
+       // row += "*"+req.body.designation[index].service+"; "
         setter.push([{
             text: req.body.designation[index].service,
             border: [false, false, false, true],
             margin: [0, 5, 0, 5],
+            color: '#333333',
+            fontSize: 11,
             alignment: 'left',
         },
         {
             border: [false, false, false, true],
-            text: '',
+            text: req.body.class === 'a' ? req.body.designation[index].unit_price : '',
             fillColor: '#f5f5f5',
             alignment: 'right',
             margin: [0, 5, 0, 5],
@@ -41,13 +46,13 @@ exports.report = async (req, res) => {
         ])
     }
 
-
     const report = await myReport.ordem({
         client: req.body.client,
         client_telefone: req.body.client_telefone,
         vehicleID: req.body.vehicleID,
         orderID: req.body.orderID,
         date: req.body.date,
+        class: req.body.class,
         ordem_status: req.body.ordem_status,
         ordem_feedback: req.body.ordem_feedback === 'empty' ? 'not' : 'yes',
         rows: setter,
@@ -82,15 +87,15 @@ exports.rangeReport = async (req, res) => {
         ordem_status: req.body.ordem_status
     }).sort({ createdAt: -1, data: -1 })
 
-  
 
-    
+
+
     res.status(200).json({
         status: 'success',
         data: {
-          data: doc
+            data: doc
         }
-      })
+    })
 }
 
 
@@ -108,15 +113,15 @@ exports.anyReport = async (req, res) => {
         ordem_status: req.body.ordem_status
     }).sort({ createdAt: -1, data: -1 })
 
-  
 
-    
+
+
     res.status(200).json({
         status: 'success',
         data: {
-          data: doc
+            data: doc
         }
-      })
+    })
 }
 
 
@@ -136,7 +141,7 @@ exports.factura = async (req, res) => {
     ])
 
     for (let i = 0; i < req.body.ordes.length; i++) {
-  
+
         for (let index = 0; index < req.body.ordes[i].designation.length; index++) {
             setter.push([
                 {
@@ -144,15 +149,15 @@ exports.factura = async (req, res) => {
                     border: [true, false, false, false]
                 },
                 {
-                    text: req.body.ordes[i].designation[index].service+" – "+req.body.ordes[i].vehicleID+"\n",
+                    text: req.body.ordes[i].vehicleID + " – " + req.body.ordes[i].designation[index].service + "\n",
                     border: [true, false, false, false]
                 },
                 {
-                    text: req.body.ordes[i].designation[index].unit_price,
+                    text: req.body.ordes[i].designation[index].unit_price + "\n",
                     border: [true, false, false, false]
                 },
                 {
-                    text: req.body.ordes[i].designation[index].unit_price,
+                    text: req.body.ordes[i].designation[index].unit_price + "\n",
                     border: [true, false, true, false]
                 }
             ])
@@ -161,11 +166,30 @@ exports.factura = async (req, res) => {
         }
     }
 
+    setter.push([
+        {
+            text: '\n\n\n\n\n\n\n\n\n\n',
+            border: [true, false, true, true]
+        },
+        {
+            text: '\n\n\n\n\n\n\n\n\n\n',
+            border: [true, false, true, true]
+        },
+        {
+            text: '\n\n\n\n\n\n\n\n\n\n',
+            border: [true, false, true, true]
+        },
+        {
+            text: '\n\n\n\n\n\n\n\n\n\n',
+            border: [true, false, true, true]
+        }
+    ])
+
     //console.log(setter);
 
     const report = await myReportc.facture({
         client: req.body.ordes[0].client,
-        Nuit: 'xxxxxx',
+        Nuit: '',
         rows: setter,
         total: total
     })
@@ -255,7 +279,7 @@ exports.balance = async (req, res) => {
     ])
 
     for (let i = 0; i < req.body.ordes.length; i++) {
-  
+
         for (let index = 0; index < req.body.ordes[i].designation.length; index++) {
             setter.push([
                 {
@@ -263,7 +287,7 @@ exports.balance = async (req, res) => {
                     border: [true, false, false, false]
                 },
                 {
-                    text: req.body.ordes[i].designation[index].service+" – "+req.body.ordes[i].vehicleID+"\n",
+                    text: req.body.ordes[i].designation[index].service + " – " + req.body.ordes[i].vehicleID + "\n",
                     border: [true, false, false, false]
                 },
                 {

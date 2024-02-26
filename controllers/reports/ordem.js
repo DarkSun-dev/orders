@@ -1,6 +1,7 @@
 const stream = require('./stream')
 var PdfPrinter = require('pdfmake')
-const path = require('path')
+const path = require('path');
+const { table } = require('console');
 
 exports.ordem = async (data) => {
     var fonts = {
@@ -38,7 +39,7 @@ exports.ordem = async (data) => {
             {
                 image: path.join(__dirname, 'img/logo.jpg'),
                 width: 130,
-                margin: [0, 0, -50, 0]
+                margin: [0, 0, -70, 0]
             },
             {
                 lineHeight: 1.20,
@@ -140,32 +141,225 @@ exports.ordem = async (data) => {
                     widths: ['*', 80],
                     body: data.rows
                 },
-
             },
             '\n',
-            '\n\n',
+            data.class === 'a' ? {
+                layout: {
+                    defaultBorder: false,
+                    hLineWidth: function (i, node) {
+                        return 1;
+                    },
+                    vLineWidth: function (i, node) {
+                        return 1;
+                    },
+                    hLineColor: function (i, node) {
+                        return '#eaeaea';
+                    },
+                    vLineColor: function (i, node) {
+                        return '#eaeaea';
+                    },
+                    hLineStyle: function (i, node) {
+                        // if (i === 0 || i === node.table.body.length) {
+                        return null;
+                        //}
+                    },
+                    // vLineStyle: function (i, node) { return {dash: { length: 10, space: 4 }}; },
+                    paddingLeft: function (i, node) {
+                        return 10;
+                    },
+                    paddingRight: function (i, node) {
+                        return 10;
+                    },
+                    paddingTop: function (i, node) {
+                        return 3;
+                    },
+                    paddingBottom: function (i, node) {
+                        return 3;
+                    },
+                    fillColor: function (rowIndex, node, columnIndex) {
+                        return '#fff';
+                    },
+                },
+                table: {
+                    headerRows: 1,
+                    widths: ['*', 'auto'],
+                    body: [
+                        [
+                            {
+                                text: 'Total:',
+                                border: [false, true, false, true],
+                                alignment: 'right',
+                                margin: [0, 5, 0, 5],
+                            },
+                            {
+                                border: [false, true, false, true],
+                                text: `${data.total} (Mzn)`,
+                                bold: true,
+                                alignment: 'right',
+                                fillColor: '#f5f5f5',
+                                margin: [0, 5, 0, 5],
+                            },
+                        ]
+                    ],
+                }
+            } : { text: '' },
+            data.class === 'a' ? '\n\n': '',
+            data.ordem_feedback === 'yes' ? '\n\n' : '',
             {
-                text: data.ordem_feedback === 'yes' ? 'Termos & condições aplicáveis': ''
+                text: data.ordem_feedback === 'yes' ? 'Termos & condições aplicáveis' : ''
             },
             '\n',
             {
-                text: data.ordem_feedback === 'yes' ? 'O Lorem Ipsum é um texto modelo da indústria \n tipográfica e de impressão': '',
+                text: data.ordem_feedback === 'yes' ? 'O Lorem Ipsum é um texto modelo da indústria \n tipográfica e de impressão' : '',
                 style: 'notesText',
             },
-            '\n\n\n',
+            data.ordem_feedback === 'yes' ? '\n\n\n' : '',
             {
                 //text: 'ASS. DO CLIENTE:_______________________________________________________'
-                text: '----------------------------------------------------------------------------------------------------------------',
+                text: '------------------------------------------------------------------------------------',
                 fontSize: 8,
             },
             {
                 text: 'Ass. do Cliente'
             },
-            '\n\n',
+            '\n',
             {
                 text: 'Processado por\n Zeyn, Orders system',
                 style: 'notesText',
+                alignment: 'right'
             },
+            '\n\n',
+
+
+
+            /*
+                        {
+                            image: path.join(__dirname, 'img/logo.jpg'),
+                            width: 130,
+                            margin: [0, 0, -50, 0]
+                        },
+                        {
+                            lineHeight: 1.20,
+                            text: 'Zeyn Car Care Center',
+                            color: '#333333',
+                            bold: true,
+                            absolutePosition: { x: 170, y: 461},
+                            margin: [0, 0, 0, 0], //left, rigth, top, bottom
+                        },
+                        {
+                            fontSize: 11,
+                            lineHeight: 1.20,
+                            text: 'Email: info@groupzeyn.com \n NUIT: 401287817 \n Bairro: Francisco Manyanga-Tete \n (+258) 871010109',
+                            color: '#333333',
+                            absolutePosition: { x: 170, y:  475},
+                            margin: [0, 0, 0, 0],
+                        },
+                        {
+                            text: 'Ordem',
+                            color: '#333333',
+                            fontSize: 28,
+                            bold: true,
+                            alignment: 'right',
+                            absolutePosition: { x: 0, y: 455 },
+                        },
+                        '\n\n',
+                        {
+                            text: `Data emissão:\n ${new Date().toLocaleDateString('pt-PT')} \nPO No.`,
+                            color: '#333333',
+                            fontSize: 11,
+                            alignment: 'right',
+                            //absolutePosition: {x: 0, y: 70},
+                        },
+                        {
+                            text: 'Cliente:',
+                            color: '#333333',
+                            bold: true,
+                        }, {
+                            text: `${data.client}`.toUpperCase(),
+                            color: '#333333',
+                            fontSize: 11,
+                            bold: true,
+                        },
+                        {
+                            text: `Código de ordem: ${data.orderID} \n Data de Ordem: ${data.date}`,
+                            fontSize: 11,
+                            color: '#333333',
+                            // absolutePosition: {x: 0, y: 70},
+                        },
+                        {
+                            text: `Viatura: ${data.vehicleID}`,
+                            color: '#333333',
+                            fontSize: 11,
+                            bold: true,
+                        },
+                        '\n\n',
+                        {
+                            layout: {
+                                defaultBorder: false,
+                                hLineWidth: function (i, node) {
+                                    return 1;
+                                },
+                                vLineWidth: function (i, node) {
+                                    return 1;
+                                },
+                                hLineColor: function (i, node) {
+                                    if (i === 1 || i === 0) {
+                                        return '#bfdde8';
+                                    }
+                                    return '#eaeaea';
+                                },
+                                vLineColor: function (i, node) {
+                                    return '#eaeaea';
+                                },
+                                hLineStyle: function (i, node) {
+                                    // if (i === 0 || i === node.table.body.length) {
+                                    return null;
+                                    //}
+                                },
+                                // vLineStyle: function (i, node) { return {dash: { length: 10, space: 4 }}; },
+                                paddingLeft: function (i, node) {
+                                    return 10;
+                                },
+                                paddingRight: function (i, node) {
+                                    return 10;
+                                },
+                                paddingTop: function (i, node) {
+                                    return 2;
+                                },
+                                paddingBottom: function (i, node) {
+                                    return 2;
+                                },
+                                fillColor: function (rowIndex, node, columnIndex) {
+                                    return '#fff';
+                                },
+                            },
+                            table: {
+                                headerRows: 1,
+                                widths: ['*', 80],
+                                body: setter
+                            },
+            
+                        },
+                        '\n',
+                        data.ordem_feedback === 'yes'? '\n\n': '',
+                        {
+                            text: data.ordem_feedback === 'yes' ? 'Termos & condições aplicáveis': ''
+                        },
+                        '\n',
+                        {
+                            text: data.ordem_feedback === 'yes' ? 'O Lorem Ipsum é um texto modelo da indústria \n tipográfica e de impressão': '',
+                            style: 'notesText',
+                        },
+                        data.ordem_feedback === 'yes'? '\n\n\n': '',
+                        {
+                            //text: 'ASS. DO CLIENTE:_______________________________________________________'
+                            text: '------------------------------------------------------------------------------------',
+                            fontSize: 8,
+                        },
+                        {
+                            text: 'Ass. do Cliente'
+                        }
+                        */
         ],
         styles: {
             notesTitle: {
