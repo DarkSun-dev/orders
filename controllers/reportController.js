@@ -5,7 +5,6 @@ const myReportc = require('./reports/facture')
 const myReportd = require('./reports/balance')
 
 exports.report = async (req, res) => {
-    console.log(req.body);
     var setter = []
     var row = ""
     setter.push([
@@ -27,7 +26,10 @@ exports.report = async (req, res) => {
     ])
 
     for (let index = 0; index < req.body.designation.length; index++) {
-       // row += "*"+req.body.designation[index].service+"; "
+        // row += "*"+req.body.designation[index].service+"; "
+        var options = { style: 'currency', currency: 'USD' }
+        var form = new Intl.NumberFormat('en-US', options)
+
         setter.push([{
             text: req.body.designation[index].service,
             border: [false, false, false, true],
@@ -38,14 +40,13 @@ exports.report = async (req, res) => {
         },
         {
             border: [false, false, false, true],
-            text: req.body.class === 'a' ? req.body.designation[index].unit_price : '',
+            text: req.body.class === 'a' ? form.format(parseInt(req.body.designation[index].unit_price)).slice(1) : '',
             fillColor: '#f5f5f5',
             alignment: 'right',
             margin: [0, 5, 0, 5],
         }
         ])
     }
-
     const report = await myReport.ordem({
         client: req.body.client,
         client_telefone: req.body.client_telefone,
@@ -58,7 +59,6 @@ exports.report = async (req, res) => {
         rows: setter,
         total: sum(req.body.designation)
     })
-
     res.send({
         doc: report
     })
@@ -72,9 +72,9 @@ const sum = (arr) => {
     return x
 }
 
+//==========================================
 
 exports.rangeReport = async (req, res) => {
-    console.log(req.body);
     const start = req.body.start
     const end = req.body.end
     //'2024-02-22'
@@ -86,10 +86,6 @@ exports.rangeReport = async (req, res) => {
         orderID: req.body.orderID,
         ordem_status: req.body.ordem_status
     }).sort({ createdAt: -1, data: -1 })
-
-
-
-
     res.status(200).json({
         status: 'success',
         data: {
@@ -98,9 +94,9 @@ exports.rangeReport = async (req, res) => {
     })
 }
 
+//==========================================
 
 exports.anyReport = async (req, res) => {
-    console.log(req.body);
     const start = req.body.start
     const end = req.body.end
     //'2024-02-22'
@@ -112,10 +108,6 @@ exports.anyReport = async (req, res) => {
         class: req.body.class,
         ordem_status: req.body.ordem_status
     }).sort({ createdAt: -1, data: -1 })
-
-
-
-
     res.status(200).json({
         status: 'success',
         data: {
@@ -124,8 +116,7 @@ exports.anyReport = async (req, res) => {
     })
 }
 
-
-
+//==========================================
 
 
 exports.factura = async (req, res) => {
@@ -143,6 +134,17 @@ exports.factura = async (req, res) => {
     for (let i = 0; i < req.body.ordes.length; i++) {
 
         for (let index = 0; index < req.body.ordes[i].designation.length; index++) {
+            var t = req.body.ordes[i].designation[index].unit_price
+            var el = parseInt(t)
+
+            var tb = req.body.ordes[i].designation[index].unit_price
+            var elb = parseInt(tb)
+
+            var options = { style: 'currency', currency: 'USD' }
+            var form = new Intl.NumberFormat('en-US', options)
+            var v = form.format(el)
+            var vb = form.format(elb)
+
             setter.push([
                 {
                     text: `1`,
@@ -153,11 +155,11 @@ exports.factura = async (req, res) => {
                     border: [true, false, false, false]
                 },
                 {
-                    text: req.body.ordes[i].designation[index].unit_price + "\n",
+                    text: v.slice(1) + "\n",
                     border: [true, false, false, false]
                 },
                 {
-                    text: req.body.ordes[i].designation[index].unit_price + "\n",
+                    text: vb.slice(1) + "\n",
                     border: [true, false, true, false]
                 }
             ])
@@ -189,6 +191,7 @@ exports.factura = async (req, res) => {
 
     const report = await myReportc.facture({
         client: req.body.ordes[0].client,
+        clientID: req.body.ordes[0].orderID,
         Nuit: '',
         rows: setter,
         total: total
@@ -198,8 +201,7 @@ exports.factura = async (req, res) => {
     })
 }
 
-
-
+//==========================================
 
 exports.invoiceReport = async (req, res) => {
     var setter = []
@@ -223,7 +225,6 @@ exports.invoiceReport = async (req, res) => {
     ])
 
     for (let i = 0; i < req.body.ordes.length; i++) {
-
 
 
         for (let index = 0; index < req.body.ordes[i].designation.length; index++) {
@@ -250,7 +251,6 @@ exports.invoiceReport = async (req, res) => {
 
     }
 
-
     const report = await myReportb.invoiceReport({
         client: req.body.ordes[0].client,
         orderID: req.body.ordes[0].orderID,
@@ -263,8 +263,7 @@ exports.invoiceReport = async (req, res) => {
     })
 }
 
-
-
+//==========================================
 
 exports.balance = async (req, res) => {
     var setter = []
@@ -287,7 +286,7 @@ exports.balance = async (req, res) => {
                     border: [true, false, false, false]
                 },
                 {
-                    text: req.body.ordes[i].designation[index].service + " – " + req.body.ordes[i].vehicleID + "\n",
+                    text: req.body.ordes[i].vehicleID + " – " + req.body.ordes[i].designation[index].service + "\n",
                     border: [true, false, false, false]
                 },
                 {
@@ -303,6 +302,25 @@ exports.balance = async (req, res) => {
             total = total + parseInt(req.body.ordes[i].designation[index].unit_price)
         }
     }
+
+    setter.push([
+        {
+            text: '\n',
+            border: [true, false, true, true]
+        },
+        {
+            text: '\n',
+            border: [true, false, true, true]
+        },
+        {
+            text: '\n',
+            border: [true, false, true, true]
+        },
+        {
+            text: '\n',
+            border: [true, false, true, true]
+        }
+    ])
 
     //console.log(setter);
 

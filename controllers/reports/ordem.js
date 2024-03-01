@@ -4,6 +4,9 @@ const path = require('path');
 const { table } = require('console');
 
 exports.ordem = async (data) => {
+    var options = { style: 'currency', currency: 'USD' }
+    var form = new Intl.NumberFormat('en-US', options)
+
     var fonts = {
         Courier: {
             normal: 'Courier',
@@ -193,7 +196,7 @@ exports.ordem = async (data) => {
                             },
                             {
                                 border: [false, true, false, true],
-                                text: `${data.total} (Mzn)`,
+                                text: `${form.format(data.total).slice(1)} (Mzn)`,
                                 bold: true,
                                 alignment: 'right',
                                 fillColor: '#f5f5f5',

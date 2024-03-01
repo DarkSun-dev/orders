@@ -1,8 +1,14 @@
 const stream = require('./stream')
 var PdfPrinter = require('pdfmake')
 const path = require('path')
+const factory = require('./../handlerFactory')
+const Client = require('./../../models/clientModel')
 
 exports.facture = async (data) => {
+    var options = { style: 'currency', currency: 'USD' }
+    var form = new Intl.NumberFormat('en-US', options)
+
+
     var fonts = {
         Courier: {
             normal: 'Courier',
@@ -84,6 +90,11 @@ exports.facture = async (data) => {
                 color: '#333333',
                 // absolutePosition: {x: 0, y: 70},
             },
+            {
+                text: `NUIT: ${await getNuit(data.clientID)}`.toUpperCase(),
+                color: '#333333',
+                // absolutePosition: {x: 0, y: 70},
+            },
             '\n\n',
             {
                 columns: [
@@ -99,8 +110,8 @@ exports.facture = async (data) => {
                 ]
             },
             '\n',
-            { text: `Subtotal: ${data.total}.00 MT \n IVA: ${data.total * 0.16}.00 MT`, margin: [0, 10], alignment: 'right', fontSize: 11, },
-            { text: `Total: ${(data.total * 0.16) + data.total}.00 MT \n Balance Due: ${(data.total * 0.16) + data.total}.00 MT`, bold: true, margin: [0, 0], alignment: 'right', fontSize: 11, },
+            { text: `Subtotal: ${form.format(data.total).slice(1)} MT \n IVA: ${form.format(data.total * 0.16).slice(1)} MT`, margin: [0, 10], alignment: 'right', fontSize: 11, },
+            { text: `Total: ${form.format((data.total * 0.16) + data.total).slice(1)} MT`, bold: true, margin: [0, 0], alignment: 'right', fontSize: 11, },
             '\n\n\n',
             { text: 'Please contact us for more information about payment options.', bold: true, margin: [0, 0], fontSize: 11, },
             '\n',
@@ -148,3 +159,10 @@ exports.facture = async (data) => {
     )
 }
 
+
+const getNuit = async (orderID) => {
+    const doc = await Client.find({ clientID: orderID })
+    if (doc.length == 0) { return '' } else {
+        return doc[0].client_nuit
+    }
+}

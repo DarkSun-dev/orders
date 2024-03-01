@@ -3,6 +3,9 @@ var PdfPrinter = require('pdfmake')
 const path = require('path')
 
 exports.balance = async (data) => {
+    var options = { style: 'currency', currency: 'USD' }
+    var form = new Intl.NumberFormat('en-US', options)
+
     var fonts = {
         Courier: {
             normal: 'Courier',
@@ -78,23 +81,19 @@ exports.balance = async (data) => {
                     }
                 ]
             },
+            '\n',
+            { text: `Total: ${form.format(data.total).slice(1)} MT`, bold: true, margin: [0, 0], alignment: 'right', fontSize: 11, },
+            '\n\n',
             {
-                columns: [
-                    {
-                        table : {
-                            headerRows : 0,
-                            widths: ['*'],
-                            body : [
-                                [''],
-                                ['']
-                            ]
-                        },
-                        layout : 'lightHorizontalLines'
-                    }
-                ]
+                text: 'Data de fecho de conta:',
+                style: 'notesText',
             },
             '\n',
-            { text: `Total: ${data.total}.00 MT \n Balance Due: ${data.total}.00 MT`, bold: true, margin: [0, 0], alignment: 'right', fontSize: 11, },
+            {
+                //text: 'ASS. DO CLIENTE:_______________________________________________________'
+                text: '---------------------------------------------------------------------------------------------------------',
+                fontSize: 8,
+            }
         ],
         styles: {
             notesTitle: {

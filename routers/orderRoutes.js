@@ -30,6 +30,8 @@ router.get('/getClients', clientController.getClients)
 
 router.get('/getOrdes/:id', clientController.getOrdes)
 
+router.post('/getOrdes', operationController.getOrdesByConditions)
+
 router.post('/rangeDate', reportController.rangeReport)
 router.post('/anyReport', reportController.anyReport)
 

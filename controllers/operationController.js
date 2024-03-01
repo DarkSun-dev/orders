@@ -14,6 +14,36 @@ exports.getOrdems = async (req, res) => {
         }
     })
 }
+
+exports.getOrdesByConditions = async (req, res) => {
+    var doc = []
+    var documentA = []
+    var documentB = []
+    var documentC = []
+
+    documentA = await Ordem.find({
+        client_telefone: req.body.ordem
+    }).sort({ createdAt: -1, data: -1 })
+    Array.prototype.push.apply(doc, documentA);
+
+    documentB = await Ordem.find({
+        client: new RegExp(req.body.ordem, 'i')
+    }).sort({ createdAt: -1, data: -1 })
+    Array.prototype.push.apply(doc, documentB);
+
+    documentC = await Ordem.find({
+        vehicleID: req.body.ordem
+    }).sort({ createdAt: -1, data: -1 })
+    Array.prototype.push.apply(doc, documentC);
+
+    res.status(200).json({
+        status: 'success',
+        data: {
+            data: doc
+        }
+    })
+}
+
 exports.removeOrdem = factory.deleteOne(Ordem)
 exports.endOrdem = factory.updateOne(Ordem)
 exports.getServices = factory.getAll(Item)
