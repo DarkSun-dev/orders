@@ -1,9 +1,10 @@
 const stream = require('./stream')
 var PdfPrinter = require('pdfmake')
 const path = require('path');
-const { table } = require('console');
 
-exports.ordem = async (data) => {
+exports.ordem = async (data, downTab) => {
+    var rows = downTab
+
     var options = { style: 'currency', currency: 'USD' }
     var form = new Intl.NumberFormat('en-US', options)
 
@@ -68,12 +69,12 @@ exports.ordem = async (data) => {
                 alignment: 'right',
                 absolutePosition: { x: 0, y: 70 },
             },
-            '\n\n',
             {
                 text: `Data emissão:\n ${new Date().toLocaleDateString('pt-PT')} \nPO No.`,
                 color: '#333333',
                 fontSize: 11,
                 alignment: 'right',
+                absolutePosition: { x: 0, y: 100 },
                 //absolutePosition: {x: 0, y: 70},
             },
             {
@@ -139,6 +140,7 @@ exports.ordem = async (data) => {
                         return '#fff';
                     },
                 },
+
                 table: {
                     headerRows: 1,
                     widths: ['*', 80],
@@ -206,7 +208,7 @@ exports.ordem = async (data) => {
                     ],
                 }
             } : { text: '' },
-            data.class === 'a' ? '\n\n': '',
+            data.class === 'a' ? '\n\n' : '',
             data.ordem_feedback === 'yes' ? '\n\n' : '',
             {
                 text: data.ordem_feedback === 'yes' ? 'Termos & condições aplicáveis' : ''
@@ -223,146 +225,154 @@ exports.ordem = async (data) => {
                 fontSize: 8,
             },
             {
-                text: 'Ass. do Cliente'
+                text: 'Ass. do Cliente',
             },
-            '\n',
-            {
-                text: 'Processado por\n Zeyn, Orders system',
-                style: 'notesText',
-                alignment: 'right'
+
+
+
+            '\n\n\n\n',
+            data.class === 'a' ? '' : {
+                text: '> --------',
+                margin: [0, 0, 0, 0],
+                color: '#333333'
             },
-            '\n\n',
+            '\n\n\n\n',
 
 
 
-            /*
-                        {
-                            image: path.join(__dirname, 'img/logo.jpg'),
-                            width: 130,
-                            margin: [0, 0, -50, 0]
+            //---------------------------------------------------------------------------------------------------
+            data.class === 'a' ? '' : [/*
+                {
+                    image: path.join(__dirname, 'img/logo.jpg'),
+                    width: 130,
+                    margin: [0, 0, 0, 0],
+                },
+                {
+                    lineHeight: 1.20,
+                    text: 'Zeyn Car Care Center',
+                    color: '#333333',
+                    bold: true,
+                    absolutePosition: { x: 170, y: 430 },
+                    margin: [0, 0, 0, 0], //left, rigth, top, bottom
+                },
+                {
+                    fontSize: 11,
+                    lineHeight: 1.20,
+                    text: 'Email: info@groupzeyn.com \n NUIT: 401287817 \n Bairro: Francisco Manyanga-Tete \n (+258) 871010109',
+                    color: '#333333',
+                    absolutePosition: { x: 170, y: 445 },
+                    margin: [0, 0, 0, 0],
+                },*/
+                {
+                    text: 'Ordem',
+                    color: '#333333',
+                    fontSize: 28,
+                    bold: true,
+                    alignment: 'right',
+                    margin: [0, 0, 0, -10]
+                    //absolutePosition: { x: 0, y: 100 },
+                },
+                '\n',
+                {
+                    text: `Data emissão:\n ${new Date().toLocaleDateString('pt-PT')} \nPO No.`,
+                    color: '#333333',
+                    fontSize: 11,
+                    alignment: 'right',
+                    margin: [0, 0, 0, -50]
+                    // absolutePosition: { x: 0, y: 120},
+                    //absolutePosition: {x: 0, y: 70},
+                },
+                {
+                    text: 'Cliente:',
+                    color: '#333333',
+                    bold: true,
+                }, {
+                    text: `${data.client}`.toUpperCase(),
+                    color: '#333333',
+                    fontSize: 11,
+                    bold: true,
+                },
+                {
+                    text: `Código de ordem: ${data.orderID} \n Data de Ordem: ${data.date}`,
+                    fontSize: 11,
+                    color: '#333333',
+                    // absolutePosition: {x: 0, y: 70},
+                },
+                {
+                    text: `Viatura: ${data.vehicleID}`,
+                    color: '#333333',
+                    fontSize: 11,
+                    bold: true,
+                },
+                '\n\n',
+                {
+                    layout: {
+                        defaultBorder: false,
+                        hLineWidth: function (i, node) {
+                            return 1;
                         },
-                        {
-                            lineHeight: 1.20,
-                            text: 'Zeyn Car Care Center',
-                            color: '#333333',
-                            bold: true,
-                            absolutePosition: { x: 170, y: 461},
-                            margin: [0, 0, 0, 0], //left, rigth, top, bottom
+                        vLineWidth: function (i, node) {
+                            return 1;
                         },
-                        {
-                            fontSize: 11,
-                            lineHeight: 1.20,
-                            text: 'Email: info@groupzeyn.com \n NUIT: 401287817 \n Bairro: Francisco Manyanga-Tete \n (+258) 871010109',
-                            color: '#333333',
-                            absolutePosition: { x: 170, y:  475},
-                            margin: [0, 0, 0, 0],
+                        hLineColor: function (i, node) {
+                            if (i === 1 || i === 0) {
+                                return '#bfdde8';
+                            }
+                            return '#eaeaea';
                         },
-                        {
-                            text: 'Ordem',
-                            color: '#333333',
-                            fontSize: 28,
-                            bold: true,
-                            alignment: 'right',
-                            absolutePosition: { x: 0, y: 455 },
+                        vLineColor: function (i, node) {
+                            return '#eaeaea';
                         },
-                        '\n\n',
-                        {
-                            text: `Data emissão:\n ${new Date().toLocaleDateString('pt-PT')} \nPO No.`,
-                            color: '#333333',
-                            fontSize: 11,
-                            alignment: 'right',
-                            //absolutePosition: {x: 0, y: 70},
+                        hLineStyle: function (i, node) {
+                            // if (i === 0 || i === node.table.body.length) {
+                            return null;
+                            //}
                         },
-                        {
-                            text: 'Cliente:',
-                            color: '#333333',
-                            bold: true,
-                        }, {
-                            text: `${data.client}`.toUpperCase(),
-                            color: '#333333',
-                            fontSize: 11,
-                            bold: true,
+                        // vLineStyle: function (i, node) { return {dash: { length: 10, space: 4 }}; },
+                        paddingLeft: function (i, node) {
+                            return 10;
                         },
-                        {
-                            text: `Código de ordem: ${data.orderID} \n Data de Ordem: ${data.date}`,
-                            fontSize: 11,
-                            color: '#333333',
-                            // absolutePosition: {x: 0, y: 70},
+                        paddingRight: function (i, node) {
+                            return 10;
                         },
-                        {
-                            text: `Viatura: ${data.vehicleID}`,
-                            color: '#333333',
-                            fontSize: 11,
-                            bold: true,
+                        paddingTop: function (i, node) {
+                            return 2;
                         },
-                        '\n\n',
-                        {
-                            layout: {
-                                defaultBorder: false,
-                                hLineWidth: function (i, node) {
-                                    return 1;
-                                },
-                                vLineWidth: function (i, node) {
-                                    return 1;
-                                },
-                                hLineColor: function (i, node) {
-                                    if (i === 1 || i === 0) {
-                                        return '#bfdde8';
-                                    }
-                                    return '#eaeaea';
-                                },
-                                vLineColor: function (i, node) {
-                                    return '#eaeaea';
-                                },
-                                hLineStyle: function (i, node) {
-                                    // if (i === 0 || i === node.table.body.length) {
-                                    return null;
-                                    //}
-                                },
-                                // vLineStyle: function (i, node) { return {dash: { length: 10, space: 4 }}; },
-                                paddingLeft: function (i, node) {
-                                    return 10;
-                                },
-                                paddingRight: function (i, node) {
-                                    return 10;
-                                },
-                                paddingTop: function (i, node) {
-                                    return 2;
-                                },
-                                paddingBottom: function (i, node) {
-                                    return 2;
-                                },
-                                fillColor: function (rowIndex, node, columnIndex) {
-                                    return '#fff';
-                                },
-                            },
-                            table: {
-                                headerRows: 1,
-                                widths: ['*', 80],
-                                body: setter
-                            },
-            
+                        paddingBottom: function (i, node) {
+                            return 2;
                         },
-                        '\n',
-                        data.ordem_feedback === 'yes'? '\n\n': '',
-                        {
-                            text: data.ordem_feedback === 'yes' ? 'Termos & condições aplicáveis': ''
+                        fillColor: function (rowIndex, node, columnIndex) {
+                            return '#fff';
                         },
-                        '\n',
-                        {
-                            text: data.ordem_feedback === 'yes' ? 'O Lorem Ipsum é um texto modelo da indústria \n tipográfica e de impressão': '',
-                            style: 'notesText',
-                        },
-                        data.ordem_feedback === 'yes'? '\n\n\n': '',
-                        {
-                            //text: 'ASS. DO CLIENTE:_______________________________________________________'
-                            text: '------------------------------------------------------------------------------------',
-                            fontSize: 8,
-                        },
-                        {
-                            text: 'Ass. do Cliente'
-                        }
-                        */
+                    },
+                    table: {
+                        headerRows: 1,
+                        widths: ['*', 80],
+                        body: rows
+                    },
+                },
+                '\n',
+                data.ordem_feedback === 'yes' ? '\n\n' : '',
+                {
+                    text: data.ordem_feedback === 'yes' ? 'Termos & condições aplicáveis' : ''
+                },
+                '\n',
+                {
+                    text: data.ordem_feedback === 'yes' ? 'O Lorem Ipsum é um texto modelo da indústria \n tipográfica e de impressão' : '',
+                    style: 'notesText',
+                },
+                data.ordem_feedback === 'yes' ? '\n\n\n' : '',
+                {
+                    //text: 'ASS. DO CLIENTE:_______________________________________________________'
+                    text: '------------------------------------------------------------------------------------',
+                    fontSize: 8,
+                },
+                {
+                    text: 'Ass. do Cliente'
+                }
+
+            ]
+
         ],
         styles: {
             notesTitle: {

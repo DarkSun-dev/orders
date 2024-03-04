@@ -5,8 +5,12 @@ const myReportc = require('./reports/facture')
 const myReportd = require('./reports/balance')
 
 exports.report = async (req, res) => {
+    var options = { style: 'currency', currency: 'USD' }
+    var form = new Intl.NumberFormat('en-US', options)
+    var downTab = []
     var setter = []
     var row = ""
+
     setter.push([
         {
             text: 'ITEMS',
@@ -25,28 +29,90 @@ exports.report = async (req, res) => {
         },
     ])
 
-    for (let index = 0; index < req.body.designation.length; index++) {
-        // row += "*"+req.body.designation[index].service+"; "
-        var options = { style: 'currency', currency: 'USD' }
-        var form = new Intl.NumberFormat('en-US', options)
-
-        setter.push([{
-            text: req.body.designation[index].service,
+    downTab.push([
+        {
+            text: 'ITEMS',
+            fillColor: '#eaf2f5',
             border: [false, false, false, true],
             margin: [0, 5, 0, 5],
-            color: '#333333',
-            fontSize: 11,
-            alignment: 'left',
+            textTransform: 'uppercase'
         },
         {
+            text: '',
             border: [false, false, false, true],
-            text: req.body.class === 'a' ? form.format(parseInt(req.body.designation[index].unit_price)).slice(1) : '',
-            fillColor: '#f5f5f5',
-            alignment: 'right',
             margin: [0, 5, 0, 5],
+            alignment: 'right',
+            fillColor: '#eaf2f5',
+            margin: [Array],
+            textTransform: 'uppercase'
         }
+    ])
+
+
+    if (req.body.class === 'a') {
+        for (let index = 0; index < req.body.designation.length; index++) {
+            setter.push([
+                {
+                    text: req.body.designation[index].service,
+                    border: [false, false, false, true],
+                    margin: [0, 5, 0, 5],
+                    color: '#333333',
+                    fontSize: 11,
+                    alignment: 'left',
+                },
+                {
+                    border: [false, false, false, true],
+                    text: form.format(parseInt(req.body.designation[index].unit_price)).slice(1),
+                    fillColor: '#f5f5f5',
+                    alignment: 'right',
+                    margin: [0, 5, 0, 5],
+                }
+            ])
+        }
+    } else {
+        for (let index = 0; index < req.body.designation.length; index++) {
+            row += "*" + req.body.designation[index].service + "; "
+        }
+
+        setter.push([
+            {
+                //text: req.body.designation[index].service,
+                text: row,
+                border: [false, false, false, true],
+                margin: [0, 5, 0, 5],
+                color: '#333333',
+                fontSize: 11,
+                alignment: 'left',
+            },
+            {
+                border: [false, false, false, true],
+                text: req.body.class === 'a' ? form.format(parseInt(req.body.designation[index].unit_price)).slice(1) : '',
+                fillColor: '#f5f5f5',
+                alignment: 'right',
+                margin: [0, 5, 0, 5],
+            }
+        ])
+
+        downTab.push([
+            {
+                //text: req.body.designation[index].service,
+                text: row,
+                border: [false, false, false, true],
+                margin: [0, 5, 0, 5],
+                color: '#333333',
+                fontSize: 11,
+                alignment: 'left',
+            },
+            {
+                border: [false, false, false, true],
+                text: req.body.class === 'a' ? form.format(parseInt(req.body.designation[index].unit_price)).slice(1) : '',
+                fillColor: '#f5f5f5',
+                alignment: 'right',
+                margin: [0, 5, 0, 5],
+            }
         ])
     }
+
     const report = await myReport.ordem({
         client: req.body.client,
         client_telefone: req.body.client_telefone,
@@ -58,7 +124,7 @@ exports.report = async (req, res) => {
         ordem_feedback: req.body.ordem_feedback === 'empty' ? 'not' : 'yes',
         rows: setter,
         total: sum(req.body.designation)
-    })
+    }, downTab)
     res.send({
         doc: report
     })
