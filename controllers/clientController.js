@@ -3,6 +3,8 @@ const Client = require('../models/clientModel')
 const Ordem = require('../models/ordemModel')
 const Item = require('../models/itemModel')
 
+exports.updateClient = factory.updateOne(Client)
+exports.deleteClient = factory.deleteOne(Client)
 exports.addClient = factory.createOne(Client)
 exports.getClients = factory.getAll(Client)
 exports.getOrdes = async (req, res) => {

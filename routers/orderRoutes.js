@@ -36,6 +36,7 @@ router.post('/getOrdes', operationController.getOrdesByConditions)
 router.post('/rangeDate', reportController.rangeReport)
 router.post('/anyReport', reportController.anyReport)
 
-
+router.patch('/updateClient/:id', clientController.updateClient)
+router.delete('/deleteClient/:id', clientController.deleteClient)
 
 module.exports = router
