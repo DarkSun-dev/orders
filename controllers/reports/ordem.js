@@ -62,7 +62,7 @@ exports.ordem = async (data, downTab) => {
                 margin: [0, 0, 0, 0],
             },
             {
-                text: 'Factura',
+                text: data.class === 'a' ? 'Factura' : 'Ordem',
                 color: '#333333',
                 fontSize: 28,
                 bold: true,
@@ -70,7 +70,7 @@ exports.ordem = async (data, downTab) => {
                 absolutePosition: { x: 0, y: 70 },
             },
             {
-                text: `Data emissão:\n ${new Date().toLocaleDateString('pt-PT')} \nFAT No.`,
+                text: data.class === 'a' ? `Data emissão:\n ${new Date().toLocaleDateString('pt-PT')} \nFAT No.`: `Data emissão:\n ${new Date().toLocaleDateString('pt-PT')} \nOrdem No.`,
                 color: '#333333',
                 fontSize: 11,
                 alignment: 'right',
@@ -265,7 +265,7 @@ exports.ordem = async (data, downTab) => {
                     margin: [0, 0, 0, 0],
                 },*/
                 {
-                    text: 'Factura',
+                    text: data.class === 'a' ? 'Factura' : 'Ordem',
                     color: '#333333',
                     fontSize: 28,
                     bold: true,
@@ -275,7 +275,7 @@ exports.ordem = async (data, downTab) => {
                 },
                 '\n',
                 {
-                    text: `Data emissão:\n ${new Date().toLocaleDateString('pt-PT')} \nFAT No.`,
+                    text: data.class === 'a' ? `Data emissão:\n ${new Date().toLocaleDateString('pt-PT')} \nFAT No.`: `Data emissão:\n ${new Date().toLocaleDateString('pt-PT')} \nOrdem No.`,
                     color: '#333333',
                     fontSize: 11,
                     alignment: 'right',
