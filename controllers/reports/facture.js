@@ -63,7 +63,7 @@ exports.facture = async (data) => {
                 margin: [0, 0, 0, 0],
             },
             {
-                text: 'FACTURA \n PRO-FORMA',
+                text: 'FACTURA',
                 color: '#333333',
                 fontSize: 11,
                 fontSize: 28,

@@ -62,7 +62,7 @@ exports.ordem = async (data, downTab) => {
                 margin: [0, 0, 0, 0],
             },
             {
-                text: 'Ordem',
+                text: 'Factura',
                 color: '#333333',
                 fontSize: 28,
                 bold: true,
@@ -191,21 +191,57 @@ exports.ordem = async (data, downTab) => {
                     body: [
                         [
                             {
-                                text: 'Total:',
+                                text: 'Sub total:',
                                 border: [false, true, false, true],
                                 alignment: 'right',
+                                fontSize: 10,
                                 margin: [0, 5, 0, 5],
                             },
                             {
                                 border: [false, true, false, true],
-                                text: `${form.format(data.total).slice(1)} (Mzn)`,
-                                bold: true,
+                                text: `${form.format(data.total).slice(1)} MT`,
                                 alignment: 'right',
+                                fontSize: 10,
                                 fillColor: '#f5f5f5',
+                                margin: [0, 5, 0, 5]
+                            }
+                        ],
+                        [
+                            {
+                                text: 'IVA:',
+                                border: [false, true, false, true],
+                                alignment: 'right',
+                                fontSize: 10,
                                 margin: [0, 5, 0, 5],
                             },
+                            {
+                                border: [false, true, false, true],
+                                text: `${form.format(data.total * 0.16).slice(1)} MT`,
+                                alignment: 'right',
+                                fontSize: 10,
+                                fillColor: '#f5f5f5',
+                                margin: [0, 5, 0, 5]
+                            }
+                        ],
+                        [
+                            {
+                                text: 'Total:',
+                                border: [false, true, false, true],
+                                alignment: 'right',
+                                fontSize: 10,
+                                margin: [0, 5, 0, 5],
+                            },
+                            {
+                                border: [false, true, false, true],
+                                text: `${form.format(data.total + (data.total * 0.16)).slice(1)} MT`,
+                                bold: true,
+                                alignment: 'right',
+                                fontSize: 10,
+                                fillColor: '#f5f5f5',
+                                margin: [0, 5, 0, 5]
+                            }
                         ]
-                    ],
+                    ]
                 }
             } : { text: '' },
             data.class === 'a' ? '\n\n' : '',
