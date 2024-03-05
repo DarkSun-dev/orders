@@ -14,6 +14,7 @@ router.post('/getReport', reportController.report)
 router.post('/getInvoiceReport', reportController.invoiceReport)
 
 router.post('/facture', reportController.factura)
+router.post('/generalFat', reportController.generalFat)
 router.post('/factureDocx', operationController.getDocx)
 
 router.post('/balance', reportController.balance)

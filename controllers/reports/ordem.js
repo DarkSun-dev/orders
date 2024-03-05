@@ -62,7 +62,7 @@ exports.ordem = async (data, downTab) => {
                 margin: [0, 0, 0, 0],
             },
             {
-                text: data.class === 'a' ? 'Factura' : 'Ordem',
+                text: 'Ordem',
                 color: '#333333',
                 fontSize: 28,
                 bold: true,
@@ -70,7 +70,7 @@ exports.ordem = async (data, downTab) => {
                 absolutePosition: { x: 0, y: 70 },
             },
             {
-                text: data.class === 'a' ? `Data emissão:\n ${new Date().toLocaleDateString('pt-PT')} \nFAT No.`: `Data emissão:\n ${new Date().toLocaleDateString('pt-PT')} \nOrdem No.`,
+                text: `Data emissão:\n ${new Date().toLocaleDateString('pt-PT')} \nPO No.`,
                 color: '#333333',
                 fontSize: 11,
                 alignment: 'right',
@@ -148,68 +148,6 @@ exports.ordem = async (data, downTab) => {
                 },
             },
             '\n',
-            data.class === 'a' ? {
-                layout: {
-                    defaultBorder: false,
-                    hLineWidth: function (i, node) {
-                        return 1;
-                    },
-                    vLineWidth: function (i, node) {
-                        return 1;
-                    },
-                    hLineColor: function (i, node) {
-                        return '#eaeaea';
-                    },
-                    vLineColor: function (i, node) {
-                        return '#eaeaea';
-                    },
-                    hLineStyle: function (i, node) {
-                        // if (i === 0 || i === node.table.body.length) {
-                        return null;
-                        //}
-                    },
-                    // vLineStyle: function (i, node) { return {dash: { length: 10, space: 4 }}; },
-                    paddingLeft: function (i, node) {
-                        return 10;
-                    },
-                    paddingRight: function (i, node) {
-                        return 10;
-                    },
-                    paddingTop: function (i, node) {
-                        return 3;
-                    },
-                    paddingBottom: function (i, node) {
-                        return 3;
-                    },
-                    fillColor: function (rowIndex, node, columnIndex) {
-                        return '#fff';
-                    },
-                },
-                table: {
-                    headerRows: 1,
-                    widths: ['*', 'auto'],
-                    body: [
-                        [
-                            {
-                                text: `Sub total:\n IVA: \n\n Total:`,
-                                border: [false, true, false, true],
-                                alignment: 'right',
-                                fontSize: 10,
-                                margin: [0, 5, 0, 5],
-                            },
-                            {
-                                border: [false, true, false, true],
-                                text: ` ${form.format(data.total).slice(1)} MT \n ${form.format(data.total * 0.16).slice(1)} MT \n\n  ${form.format(data.total + (data.total * 0.16)).slice(1)} MT`,
-                                alignment: 'right',
-                                fontSize: 10,
-                                fillColor: '#f5f5f5',
-                                margin: [0, 5, 0, 5]
-                            }
-                        ],
-                    ]
-                }
-            } : { text: '' },
-            data.class === 'a' ? '\n\n' : '',
             data.ordem_feedback === 'yes' ? '\n\n' : '',
             {
                 text: data.ordem_feedback === 'yes' ? 'Termos & condições aplicáveis' : ''
@@ -232,11 +170,12 @@ exports.ordem = async (data, downTab) => {
 
 
             '\n\n\n\n',
+            /*
             data.class === 'a' ? '' : {
                 text: '> --------',
                 margin: [0, 0, 0, 0],
                 color: '#333333'
-            },
+            },*/
             '\n\n\n\n',
 
 
@@ -265,7 +204,7 @@ exports.ordem = async (data, downTab) => {
                     margin: [0, 0, 0, 0],
                 },*/
                 {
-                    text: data.class === 'a' ? 'Factura' : 'Ordem',
+                    text: 'Ordem',
                     color: '#333333',
                     fontSize: 28,
                     bold: true,
@@ -275,7 +214,7 @@ exports.ordem = async (data, downTab) => {
                 },
                 '\n',
                 {
-                    text: data.class === 'a' ? `Data emissão:\n ${new Date().toLocaleDateString('pt-PT')} \nFAT No.`: `Data emissão:\n ${new Date().toLocaleDateString('pt-PT')} \nOrdem No.`,
+                    text: `Data emissão:\n ${new Date().toLocaleDateString('pt-PT')} \nPO No.`,
                     color: '#333333',
                     fontSize: 11,
                     alignment: 'right',
@@ -405,17 +344,4 @@ exports.ordem = async (data, downTab) => {
         //writeStream.end(callback)
     }
     )
-}
-
-async function produceRef(bi) {
-    const b = bi
-    const d = b.charAt(0)
-    const d1 = b.charAt(9)
-    const d2 = b.charAt(10)
-    const d3 = b.charAt(11)
-    const d4 = b.charAt(12)
-    const codigo = 'ref00' + d1 + d2 + d3 + d4 + d + '@2kdomwriter'
-    return new Promise((resolve, reject) => {
-        resolve(codigo)
-    })
 }

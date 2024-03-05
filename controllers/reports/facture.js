@@ -74,7 +74,7 @@ exports.facture = async (data) => {
             '\n\n',
             {
                 lineHeight: 1.20,
-                text: ` Data: ${new Date().toLocaleDateString('pt-PT')} \n Quote No.:`,
+                text: ` Data: ${new Date().toLocaleDateString('pt-PT')} \n FAT No.:`,
                 fontSize: 11,
                 color: '#333333',
                 alignment: 'right',

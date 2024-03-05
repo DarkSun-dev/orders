@@ -8,6 +8,10 @@ const itemSchema = new mongoose.Schema({
         type: String, 
         required: true
     },
+    qty: {
+        type: String, 
+        required: true
+    },
     itemID: {
         type: String
     }

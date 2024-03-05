@@ -3,6 +3,7 @@ const myReport = require('./reports/ordem')
 const myReportb = require('./reports/invoiceReport')
 const myReportc = require('./reports/facture')
 const myReportd = require('./reports/balance')
+const myReporte = require('./reports/generalFat')
 
 exports.report = async (req, res) => {
     var options = { style: 'currency', currency: 'USD' }
@@ -49,69 +50,47 @@ exports.report = async (req, res) => {
     ])
 
 
-    if (req.body.class === 'a') {
-        for (let index = 0; index < req.body.designation.length; index++) {
-            setter.push([
-                {
-                    text: req.body.designation[index].service,
-                    border: [false, false, false, true],
-                    margin: [0, 5, 0, 5],
-                    color: '#333333',
-                    fontSize: 11,
-                    alignment: 'left',
-                },
-                {
-                    border: [false, false, false, true],
-                    text: form.format(parseInt(req.body.designation[index].unit_price)).slice(1),
-                    fillColor: '#f5f5f5',
-                    alignment: 'right',
-                    margin: [0, 5, 0, 5],
-                }
-            ])
-        }
-    } else {
-        for (let index = 0; index < req.body.designation.length; index++) {
-            row += "*" + req.body.designation[index].service + "; "
-        }
-
-        setter.push([
-            {
-                //text: req.body.designation[index].service,
-                text: row,
-                border: [false, false, false, true],
-                margin: [0, 5, 0, 5],
-                color: '#333333',
-                fontSize: 11,
-                alignment: 'left',
-            },
-            {
-                border: [false, false, false, true],
-                text: req.body.class === 'a' ? form.format(parseInt(req.body.designation[index].unit_price)).slice(1) : '',
-                fillColor: '#f5f5f5',
-                alignment: 'right',
-                margin: [0, 5, 0, 5],
-            }
-        ])
-
-        downTab.push([
-            {
-                //text: req.body.designation[index].service,
-                text: row,
-                border: [false, false, false, true],
-                margin: [0, 5, 0, 5],
-                color: '#333333',
-                fontSize: 11,
-                alignment: 'left',
-            },
-            {
-                border: [false, false, false, true],
-                text: req.body.class === 'a' ? form.format(parseInt(req.body.designation[index].unit_price)).slice(1) : '',
-                fillColor: '#f5f5f5',
-                alignment: 'right',
-                margin: [0, 5, 0, 5],
-            }
-        ])
+    for (let index = 0; index < req.body.designation.length; index++) {
+        row += "*" + req.body.designation[index].service + "; "
     }
+
+    setter.push([
+        {
+            //text: req.body.designation[index].service,
+            text: row,
+            border: [false, false, false, true],
+            margin: [0, 5, 0, 5],
+            color: '#333333',
+            fontSize: 11,
+            alignment: 'left',
+        },
+        {
+            border: [false, false, false, true],
+            text: req.body.class === 'a' ? form.format(parseInt(req.body.designation[index].unit_price)).slice(1) : '',
+            fillColor: '#f5f5f5',
+            alignment: 'right',
+            margin: [0, 5, 0, 5],
+        }
+    ])
+
+    downTab.push([
+        {
+            //text: req.body.designation[index].service,
+            text: row,
+            border: [false, false, false, true],
+            margin: [0, 5, 0, 5],
+            color: '#333333',
+            fontSize: 11,
+            alignment: 'left',
+        },
+        {
+            border: [false, false, false, true],
+            text: req.body.class === 'a' ? form.format(parseInt(req.body.designation[index].unit_price)).slice(1) : '',
+            fillColor: '#f5f5f5',
+            alignment: 'right',
+            margin: [0, 5, 0, 5],
+        }
+    ])
 
     const report = await myReport.ordem({
         client: req.body.client,
@@ -204,7 +183,7 @@ exports.factura = async (req, res) => {
             var el = parseInt(t)
 
             var tb = req.body.ordes[i].designation[index].unit_price
-            var elb = parseInt(tb)
+            var elb = parseInt(tb)*parseInt(req.body.ordes[i].designation[index].qty)
 
             var options = { style: 'currency', currency: 'USD' }
             var form = new Intl.NumberFormat('en-US', options)
@@ -213,7 +192,7 @@ exports.factura = async (req, res) => {
 
             setter.push([
                 {
-                    text: `1`,
+                    text: req.body.ordes[i].designation[index].qty,
                     border: [true, false, false, false]
                 },
                 {
@@ -230,7 +209,7 @@ exports.factura = async (req, res) => {
                 }
             ])
 
-            total = total + parseInt(req.body.ordes[i].designation[index].unit_price)
+            total = total + (parseInt(req.body.ordes[i].designation[index].unit_price)*parseInt(req.body.ordes[i].designation[index].qty))
         }
     }
 
@@ -348,24 +327,24 @@ exports.balance = async (req, res) => {
         for (let index = 0; index < req.body.ordes[i].designation.length; index++) {
             setter.push([
                 {
-                    text: `1`,
+                    text: req.body.ordes[i].designation[index].qty + "\n",
                     border: [true, false, false, false]
                 },
                 {
-                    text: req.body.ordes[i].vehicleID + " – " + req.body.ordes[i].designation[index].service + "\n",
-                    border: [true, false, false, false]
-                },
-                {
-                    text: req.body.ordes[i].designation[index].unit_price,
+                    text: req.body.ordes[i].designation[index].service + "\n",
                     border: [true, false, false, false]
                 },
                 {
                     text: req.body.ordes[i].designation[index].unit_price,
+                    border: [true, false, false, false]
+                },
+                {
+                    text: parseInt(req.body.ordes[i].designation[index].unit_price)*parseInt(req.body.ordes[i].designation[index].qty),
                     border: [true, false, true, false]
                 }
             ])
 
-            total = total + parseInt(req.body.ordes[i].designation[index].unit_price)
+            total = total + (parseInt(req.body.ordes[i].designation[index].unit_price)*parseInt(req.body.ordes[i].designation[index].qty))
         }
     }
 
@@ -393,6 +372,92 @@ exports.balance = async (req, res) => {
     const report = await myReportd.balance({
         client: req.body.ordes[0].client,
         Nuit: 'xxxxxx',
+        rows: setter,
+        total: total
+    })
+    res.send({
+        doc: report
+    })
+}
+
+//========================================
+exports.generalFat = async (req, res) => {
+    var setter = []
+    var total = 0
+
+
+    setter.push([
+        { text: 'Qty', style: 'tableHeader', bold: true },
+        { text: 'Item description', style: 'tableHeader', bold: true },
+        { text: 'Unit Price', style: 'tableHeader', bold: true },
+        { text: 'Total', style: 'tableHeader', bold: true }
+    ])
+
+    for (let i = 0; i < req.body.ordes.length; i++) {
+
+        for (let index = 0; index < req.body.ordes[i].designation.length; index++) {
+            var t = req.body.ordes[i].designation[index].unit_price
+            var el = parseInt(t)
+
+            var tb = req.body.ordes[i].designation[index].unit_price
+            var elb = parseInt(tb)*parseInt(req.body.ordes[i].designation[index].qty)
+
+            var options = { style: 'currency', currency: 'USD' }
+            var form = new Intl.NumberFormat('en-US', options)
+            var v = form.format(el)
+            var vb = form.format(elb)
+
+            setter.push([
+                {
+                    text: req.body.ordes[i].designation[index].qty + "\n",
+                    border: [true, false, false, false]
+                },
+                {
+                    text: req.body.ordes[i].designation[index].service + "\n",
+                    border: [true, false, false, false]
+                },
+                {
+                    text: v.slice(1) + "\n",
+                    border: [true, false, false, false]
+                },
+                {
+                    text: vb.slice(1) + "\n",
+                    border: [true, false, true, false]
+                }
+            ])
+
+            total = total + (parseInt(req.body.ordes[i].designation[index].unit_price)*parseInt(req.body.ordes[i].designation[index].qty))
+        }
+    }
+
+    setter.push([
+        {
+            text: '\n\n\n\n\n\n\n\n\n\n',
+            border: [true, false, true, true]
+        },
+        {
+            text: '\n\n\n\n\n\n\n\n\n\n',
+            border: [true, false, true, true]
+        },
+        {
+            text: '\n\n\n\n\n\n\n\n\n\n',
+            border: [true, false, true, true]
+        },
+        {
+            text: '\n\n\n\n\n\n\n\n\n\n',
+            border: [true, false, true, true]
+        }
+    ])
+
+    //console.log(setter);
+
+    const report = await myReporte.generalFat({
+        client: req.body.ordes[0].client,
+        clientID: req.body.ordes[0].orderID,
+        Nuit: '',
+        vehicleID: req.body.ordes[0].vehicleID,
+        orderID: req.body.ordes[0].orderID,
+        date: req.body.ordes[0].date,
         rows: setter,
         total: total
     })
