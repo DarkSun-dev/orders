@@ -82,7 +82,7 @@ exports.quote = async (data) => {
             },
             {
                 lineHeight: 1.20,
-                text: data.docType === 'Factura' ? 'FAT No.:' : 'Quot. No.:',
+                text: data.docType === 'Factura' ? 'FAT No.:' : "Quot. No.: 00"+gerador(3),
                 fontSize: 11,
                 color: '#333333',
                 alignment: 'right',
@@ -186,4 +186,13 @@ const getNuit = async (orderID) => {
     if (doc.length == 0) { return '' } else {
         return doc[0].client_nuit
     }
+}
+function gerador(length) {
+    var result = '';
+    var characters = '0123456789';
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
 }
