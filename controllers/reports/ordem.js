@@ -70,7 +70,7 @@ exports.ordem = async (data, downTab) => {
                 absolutePosition: { x: 0, y: 70 },
             },
             {
-                text: `Data emissão:\n ${new Date().toLocaleDateString('pt-PT')} \nPO No.`,
+                text: `ID: ${data.orderID} \n Data emissão:\n ${new Date().toLocaleDateString('pt-PT')} \nPO No.`,
                 color: '#333333',
                 fontSize: 11,
                 alignment: 'right',
@@ -88,7 +88,19 @@ exports.ordem = async (data, downTab) => {
                 bold: true,
             },
             {
-                text: `Código: ${data.orderID} \n Data: ${data.date}`,
+                text: `NUIT: ${data.nuit}`,
+                fontSize: 11,
+                color: '#333333',
+                // absolutePosition: {x: 0, y: 70},
+            },
+            {
+                text: data.address === '--' ? '' : `Endereço: ${data.address}`,
+                fontSize: 11,
+                color: '#333333',
+                // absolutePosition: {x: 0, y: 70},
+            },
+            {
+                text: `Data: ${data.date}`,
                 fontSize: 11,
                 color: '#333333',
                 // absolutePosition: {x: 0, y: 70},
@@ -214,7 +226,7 @@ exports.ordem = async (data, downTab) => {
                 },
                 '\n',
                 {
-                    text: `Data emissão:\n ${new Date().toLocaleDateString('pt-PT')} \nPO No.`,
+                    text: `ID: ${data.orderID} \n Data emissão:\n ${new Date().toLocaleDateString('pt-PT')} \nPO No.`,
                     color: '#333333',
                     fontSize: 11,
                     alignment: 'right',
@@ -233,7 +245,19 @@ exports.ordem = async (data, downTab) => {
                     bold: true,
                 },
                 {
-                    text: `Código: ${data.orderID} \n Data: ${data.date}`,
+                    text: `NUIT: ${data.nuit}`,
+                    fontSize: 11,
+                    color: '#333333',
+                    // absolutePosition: {x: 0, y: 70},
+                },
+                {
+                    text: data.address === '--' ? '' : `Endereço: ${data.address}`,
+                    fontSize: 11,
+                    color: '#333333',
+                    // absolutePosition: {x: 0, y: 70},
+                },
+                {
+                    text: `Data: ${data.date}`,
                     fontSize: 11,
                     color: '#333333',
                     // absolutePosition: {x: 0, y: 70},

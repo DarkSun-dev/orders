@@ -15,6 +15,9 @@ const clientSchema = new mongoose.Schema({
     client_nuit: {
         type: String
     },
+    client_address: {
+        type: String
+    },
     email: {
         type: String,
         required: [true, 'Por favor, forneca-nos o email do Cliente'],

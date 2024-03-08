@@ -52,7 +52,7 @@ exports.report = async (req, res) => {
 
 
     for (let index = 0; index < req.body.designation.length; index++) {
-        row += "*" + req.body.designation[index].service + "; "
+        row += "#" + req.body.designation[index].qty + " – " + req.body.designation[index].service + "; "
     }
 
     setter.push([
@@ -96,6 +96,8 @@ exports.report = async (req, res) => {
     const report = await myReport.ordem({
         client: req.body.client,
         client_telefone: req.body.client_telefone,
+        nuit: req.body.nuit,
+        address: req.body.client_address,
         vehicleID: req.body.vehicleID,
         orderID: req.body.orderID,
         date: req.body.date,
@@ -184,7 +186,7 @@ exports.factura = async (req, res) => {
             var el = parseInt(t)
 
             var tb = req.body.ordes[i].designation[index].unit_price
-            var elb = parseInt(tb)*parseInt(req.body.ordes[i].designation[index].qty)
+            var elb = parseInt(tb) * parseInt(req.body.ordes[i].designation[index].qty)
 
             var options = { style: 'currency', currency: 'USD' }
             var form = new Intl.NumberFormat('en-US', options)
@@ -210,7 +212,7 @@ exports.factura = async (req, res) => {
                 }
             ])
 
-            total = total + (parseInt(req.body.ordes[i].designation[index].unit_price)*parseInt(req.body.ordes[i].designation[index].qty))
+            total = total + (parseInt(req.body.ordes[i].designation[index].unit_price) * parseInt(req.body.ordes[i].designation[index].qty))
         }
     }
 
@@ -340,12 +342,12 @@ exports.balance = async (req, res) => {
                     border: [true, false, false, false]
                 },
                 {
-                    text: parseInt(req.body.ordes[i].designation[index].unit_price)*parseInt(req.body.ordes[i].designation[index].qty),
+                    text: parseInt(req.body.ordes[i].designation[index].unit_price) * parseInt(req.body.ordes[i].designation[index].qty),
                     border: [true, false, true, false]
                 }
             ])
 
-            total = total + (parseInt(req.body.ordes[i].designation[index].unit_price)*parseInt(req.body.ordes[i].designation[index].qty))
+            total = total + (parseInt(req.body.ordes[i].designation[index].unit_price) * parseInt(req.body.ordes[i].designation[index].qty))
         }
     }
 
@@ -401,7 +403,7 @@ exports.generalFat = async (req, res) => {
             var el = parseInt(t)
 
             var tb = req.body.ordes[i].designation[index].unit_price
-            var elb = parseInt(tb)*parseInt(req.body.ordes[i].designation[index].qty)
+            var elb = parseInt(tb) * parseInt(req.body.ordes[i].designation[index].qty)
 
             var options = { style: 'currency', currency: 'USD' }
             var form = new Intl.NumberFormat('en-US', options)
@@ -427,7 +429,7 @@ exports.generalFat = async (req, res) => {
                 }
             ])
 
-            total = total + (parseInt(req.body.ordes[i].designation[index].unit_price)*parseInt(req.body.ordes[i].designation[index].qty))
+            total = total + (parseInt(req.body.ordes[i].designation[index].unit_price) * parseInt(req.body.ordes[i].designation[index].qty))
         }
     }
 
@@ -494,7 +496,7 @@ exports.quoteFat = async (req, res) => {
             var el = parseInt(t)
 
             var tb = req.body.ordes[i].designation[index].unit_price
-            var elb = parseInt(tb)*parseInt(req.body.ordes[i].designation[index].qty)
+            var elb = parseInt(tb) * parseInt(req.body.ordes[i].designation[index].qty)
 
             var options = { style: 'currency', currency: 'USD' }
             var form = new Intl.NumberFormat('en-US', options)
@@ -520,7 +522,7 @@ exports.quoteFat = async (req, res) => {
                 }
             ])
 
-            total = total + (parseInt(req.body.ordes[i].designation[index].unit_price)*parseInt(req.body.ordes[i].designation[index].qty))
+            total = total + (parseInt(req.body.ordes[i].designation[index].unit_price) * parseInt(req.body.ordes[i].designation[index].qty))
         }
     }
 
@@ -549,10 +551,12 @@ exports.quoteFat = async (req, res) => {
         client: req.body.ordes[0].client,
         clientID: req.body.ordes[0].orderID,
         nuit: req.body.ordes[0].nuit,
-        vehicleID: req.body.ordes[0].vehicleID,
+        address: req.body.ordes[0].address,
+        vehicleID: req.body.ordes[0].vehicleID+"".toLowerCase(),
         orderID: req.body.ordes[0].orderID,
         date: req.body.ordes[0].date,
         rows: setter,
+        docType: req.body.docType,
         total: total
     })
     res.send({

@@ -63,7 +63,7 @@ exports.quote = async (data) => {
             },
             {
                 //text: 'COTAÇÃO',
-                text: 'FACTURA \n PRO-FORMA',
+                text: data.docType === 'fat' ? 'FACTURA \n PRO-FORMA' : `${data.docType}`.toUpperCase(),
                 color: '#333333',
                 fontSize: 11,
                 fontSize: 28,
@@ -74,7 +74,15 @@ exports.quote = async (data) => {
             '\n\n',
             {
                 lineHeight: 1.20,
-                text: ` Data de emissão: \n ${new Date().toLocaleDateString('pt-PT')} \n Quot. No.:`,
+                text: ` Data de emissão: \n ${new Date().toLocaleDateString('pt-PT')}`,
+                fontSize: 11,
+                color: '#333333',
+                alignment: 'right',
+                // absolutePosition: {x: 0, y: 70},
+            },
+            {
+                lineHeight: 1.20,
+                text: data.docType === 'Factura' ? 'FAT No.:' : 'Quot. No.:',
                 fontSize: 11,
                 color: '#333333',
                 alignment: 'right',
@@ -91,7 +99,19 @@ exports.quote = async (data) => {
                 bold: true,
             },
             {
-                text: `NUIT: ${data.nuit}\n`,
+                text: `NUIT: ${data.nuit}`,
+                fontSize: 11,
+                color: '#333333',
+                // absolutePosition: {x: 0, y: 70},
+            },
+            {
+                text: data.address === '--' ? '' : `Endereço: ${data.address}`,
+                fontSize: 11,
+                color: '#333333',
+                // absolutePosition: {x: 0, y: 70},
+            },
+            {
+                text: data.vehicleID === '--' ? '' : `Viatura: ${data.vehicleID}`,
                 fontSize: 11,
                 color: '#333333',
                 // absolutePosition: {x: 0, y: 70},

@@ -11,6 +11,12 @@ const ordemSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    nuit: {
+        type: String
+    },
+    client_address: {
+        type: String
+    },
     vehicleID: {
         type: String
     },

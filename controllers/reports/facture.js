@@ -95,6 +95,12 @@ exports.facture = async (data) => {
                 color: '#333333',
                 // absolutePosition: {x: 0, y: 70},
             },
+            {
+                text: `Endereço: ${await getAddress(data.clientID)}`,
+                fontSize: 11,
+                color: '#333333',
+                // absolutePosition: {x: 0, y: 70},
+            },
             '\n\n',
             {
                 columns: [
@@ -164,5 +170,11 @@ const getNuit = async (orderID) => {
     const doc = await Client.find({ clientID: orderID })
     if (doc.length == 0) { return '' } else {
         return doc[0].client_nuit
+    }
+}
+const getAddress = async (orderID) => {
+    const doc = await Client.find({ clientID: orderID })
+    if (doc.length == 0) { return '' } else {
+        return doc[0].client_address
     }
 }

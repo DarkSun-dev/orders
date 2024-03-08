@@ -109,7 +109,7 @@ exports.getDocx = async (req, res) => {
 
             setter.push([
                 {
-                    text: `1`,
+                    text: `${req.body.ordes[i].designation[index].qty}`,
                     border: [true, false, false, false]
                 },
                 {
@@ -126,7 +126,7 @@ exports.getDocx = async (req, res) => {
                 }
             ])
 
-            total = total + parseInt(req.body.ordes[i].designation[index].unit_price)
+            total = total + (parseInt(req.body.ordes[i].designation[index].unit_price) * parseInt(req.body.ordes[i].designation[index].qty))
         }
     }
 
