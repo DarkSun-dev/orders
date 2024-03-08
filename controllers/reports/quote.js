@@ -111,7 +111,7 @@ exports.quote = async (data) => {
                 // absolutePosition: {x: 0, y: 70},
             },
             {
-                text: data.vehicleID === '--' ? '' : `Viatura: ${data.vehicleID}`,
+                text: data.vehicleID === '--' ? '' : `Viatura: ${data.vehicleID}`.toUpperCase(),
                 fontSize: 11,
                 color: '#333333',
                 // absolutePosition: {x: 0, y: 70},
