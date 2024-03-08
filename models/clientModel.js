@@ -20,7 +20,6 @@ const clientSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: [true, 'Por favor, forneca-nos o email do Cliente'],
         lowercase: true,
         validate: [validator.isEmail, 'Please provide a valid email']
     },
