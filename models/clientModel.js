@@ -10,6 +10,7 @@ const clientSchema = new mongoose.Schema({
     },
     client: {
         type: String,
+        unique: true,
         required: [true, 'Por favor, forneca-nos o nome do Cliente']
     },
     client_nuit: {
@@ -20,8 +21,7 @@ const clientSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        lowercase: true,
-        validate: [validator.isEmail, 'Please provide a valid email']
+        lowercase: true
     },
     client_telefone: {
         type: String,

@@ -6,8 +6,6 @@ const fs = require('fs')
 var Buffer = require('buffer/').Buffer
 var CloudmersiveConvertApiClient = require('cloudmersive-convert-api-client');
 
-exports.ordeService = factory.createOne(Ordem)
-exports.addService = factory.createOne(Item)
 exports.getOrdems = async (req, res) => {
     const doc = await Ordem.find({ ordem_status: 'pending' }).sort({ createdAt: -1, data: -1 })
     res.status(200).json({
@@ -47,44 +45,18 @@ exports.getOrdesByConditions = async (req, res) => {
     })
 }
 
-exports.removeOrdem = factory.deleteOne(Ordem)
-exports.endOrdem = factory.updateOne(Ordem)
-exports.getServices = factory.getAll(Item)
-exports.removeService = factory.deleteOne(Item)
-
-/*
-async function backup() {
-    const doc = await Ordem.find()
-    const data = {
-        data: doc
-    }
-    try {
-        fs.writeFileSync('ordens.json', JSON.stringify(data));
-        console.log('Done writing to file.');
-    }
-    catch(err) {
-        console.log('Error writing to file', err)
-    }
-}
-backup() 
-*/
-
 
 var defaultClient = CloudmersiveConvertApiClient.ApiClient.instance;
-// Configure API key authorization: Apikey
 var Apikey = defaultClient.authentications['Apikey'];
 Apikey.apiKey = process.env.PDF_API_KEY;
-
 var apiInstance = new CloudmersiveConvertApiClient.ConvertDocumentApi();
 /*
 var filePath = "/temp/file.pdf";
 var inputFile = Buffer.from(fs.readFileSync(__dirname + filePath).buffer)
 */
-
 exports.getDocx = async (req, res) => {
     var setter = []
     var total = 0
-
 
     setter.push([
         { text: 'Qty', style: 'tableHeader', bold: true },
@@ -149,8 +121,6 @@ exports.getDocx = async (req, res) => {
         }
     ])
 
-    //console.log(setter);
-
     const report = await myReportc.facture({
         client: req.body.ordes[0].client,
         clientID: req.body.ordes[0].orderID,
@@ -174,10 +144,15 @@ exports.getDocx = async (req, res) => {
             })*/
         }
     }
-
     apiInstance.convertDocumentPdfToDocx(report, callback)
 }
 
+exports.getServices = factory.getAll(Item)
+exports.ordeService = factory.createOne(Ordem)
+exports.addService = factory.createOne(Item)
+exports.endOrdem = factory.updateOne(Ordem)
+exports.removeService = factory.deleteOne(Item)
+exports.removeOrdem = factory.deleteOne(Ordem)
 
 
 

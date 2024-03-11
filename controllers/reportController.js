@@ -452,8 +452,6 @@ exports.generalFat = async (req, res) => {
         }
     ])
 
-    //console.log(setter);
-
     const report = await myReporte.generalFat({
         client: req.body.ordes[0].client,
         clientID: req.body.ordes[0].orderID,
@@ -468,8 +466,6 @@ exports.generalFat = async (req, res) => {
         doc: report
     })
 }
-
-
 
 
 
@@ -544,8 +540,6 @@ exports.quoteFat = async (req, res) => {
             border: [true, false, true, true]
         }
     ])
-
-    //console.log(setter);
 
     const report = await myReportf.quote({
         client: req.body.ordes[0].client,
