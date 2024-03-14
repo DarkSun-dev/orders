@@ -1,11 +1,13 @@
 {
-    "theme_color": "#333230",
-    "background_color": "#3e3e3e",
+    "background_color": "#c6c2c2",
+    "dir": "ltr",
     "display": "standalone",
-    "scope": "/",
-    "start_url": "/",
-    "short_name": "Orders",
     "name": "Orders",
+    "orientation": "any",
+    "scope": "/",
+    "short_name": "Orders",
+    "start_url": "/",
+    "theme_color": "#b7b3b3",
     "icons": [
         {
             "src": "/icon-192x192.png",
@@ -27,5 +29,12 @@
             "sizes": "512x512",
             "type": "image/png"
         }
+    ],
+    "id": "zeyn",
+    "description": "Invoice manager",
+    "lang": "pt",
+    "categories": [
+      "business"
     ]
 }
+
