@@ -43,5 +43,5 @@ const ordemSchema = new mongoose.Schema({
     timestamps: true
 })
 
-const Ordem = mongoose.model('Ordem', ordemSchema)
+const Ordem = mongoose.model('Ordem', ordemSchema, 'ordems')
 module.exports = Ordem

@@ -2,8 +2,10 @@ const express = require('express')
 const operationController = require('./../controllers/operationController')
 const clientController = require('./../controllers/clientController')
 const reportController = require('./../controllers/reportController')
+const registerController = require('./../controllers/registerController')
 const router = express.Router()
 
+router.get('/getOrdes/:id', clientController.getOrdes)
 router.get('/getService', operationController.getServices)
 router.get('/getService/:id', clientController.getMyServices)
 router.get('/getOrdems', operationController.getOrdems)
@@ -21,8 +23,10 @@ router.post('/createService', operationController.addService)
 router.post('/ordeService', operationController.ordeService)
 router.post('/createClient', clientController.addClient)
 
-router.get('/getOrdes/:id', clientController.getOrdes)
+router.post('/ordemRegister', registerController.ordemRegister)
+
 router.post('/getOrdes', operationController.getOrdesByConditions)
+
 router.post('/rangeDate', reportController.rangeReport)
 router.post('/anyReport', reportController.anyReport)
 

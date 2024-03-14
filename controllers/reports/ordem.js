@@ -100,7 +100,7 @@ exports.ordem = async (data, downTab) => {
                 // absolutePosition: {x: 0, y: 70},
             },
             {
-                text: `Data: ${data.date}`,
+                text: `Data de ordem: ${data.date}`,
                 fontSize: 11,
                 color: '#333333',
                 // absolutePosition: {x: 0, y: 70},
@@ -257,7 +257,7 @@ exports.ordem = async (data, downTab) => {
                     // absolutePosition: {x: 0, y: 70},
                 },
                 {
-                    text: `Data: ${data.date}`,
+                    text: `Data de ordem: ${data.date}`,
                     fontSize: 11,
                     color: '#333333',
                     // absolutePosition: {x: 0, y: 70},
