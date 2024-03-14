@@ -1,5 +1,5 @@
 {
-    "background_color": "#c6c2c2",
+    "background_color": "#fff",
     "dir": "ltr",
     "display": "standalone",
     "name": "Orders",
@@ -7,7 +7,7 @@
     "scope": "/",
     "short_name": "Orders",
     "start_url": "/",
-    "theme_color": "#b7b3b3",
+    "theme_color": "#fff",
     "icons": [
         {
             "src": "icon-192x192.png",
