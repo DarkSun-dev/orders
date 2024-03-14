@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.onrender.zeynorders.twa",
+        "sha256_cert_fingerprints": ["08:D2:C5:48:0F:7B:0D:22:59:1D:BC:59:79:06:A7:6B:F0:25:13:B0:62:A7:69:5A:2B:0F:26:A0:01:C0:F9:09"]
+      }
+    }]
