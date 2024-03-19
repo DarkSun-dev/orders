@@ -16,6 +16,15 @@ exports.getOrdes = async (req, res) => {
             }
         })
 }
+exports.getOldestOrdes = async (req, res) => {
+    const doc = await Ordem.find({ orderID: req.params.id }).sort({ createdAt: 1, data: 1 })
+        res.status(200).json({
+            status: 'success',
+            data: {
+                data: doc
+            }
+        })
+}
 exports.getMyServices = async (req, res) => {
     const doc = await Item.find({ itemID: req.params.id })
         res.status(200).json({

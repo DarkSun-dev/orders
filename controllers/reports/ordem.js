@@ -70,7 +70,7 @@ exports.ordem = async (data, downTab) => {
                 absolutePosition: { x: 0, y: 70 },
             },
             {
-                text: `ID: ${data.orderID} \n Data emissão:\n ${new Date().toLocaleDateString('pt-PT')} \nPO No.`,
+                text: `ID: ${data.orderID} \n Data emissão:\n ${new Date().toLocaleDateString('pt-PT')} \nPO No.${gerador(3)}`,
                 color: '#333333',
                 fontSize: 11,
                 alignment: 'right',
@@ -188,17 +188,29 @@ exports.ordem = async (data, downTab) => {
                 margin: [0, 0, 0, 0],
                 color: '#333333'
             },*/
-            '\n\n\n\n',
+            '\n\n\n',
 
-
+            {
+                text: '',
+                margin: [0, 30]
+            },
 
             //---------------------------------------------------------------------------------------------------
-            data.class === 'a' ? '' : [/*
+            data.class === 'a' ? '' : [
                 {
-                    image: path.join(__dirname, 'img/logo.jpg'),
-                    width: 130,
-                    margin: [0, 0, 0, 0],
+                    text: [{ text: 'Ordem \n', fontSize: 28, bold: true }, `ID: ${data.orderID} \n Data emissão:\n ${new Date().toLocaleDateString('pt-PT')} \nPO No.${gerador(3)}`],
+                    color: '#333333',
+                    fontSize: 11,
+                    alignment: 'right',
+                    margin: [0, -50]
+                    // absolutePosition: { x: 0, y: 120},
+                    //absolutePosition: {x: 0, y: 70},
                 },
+                {
+                    image: path.join(__dirname, 'img/header.jpg'),
+                    width: 300,
+                    margin: [0, -50],
+                },/*
                 {
                     lineHeight: 1.20,
                     text: 'Zeyn Car Care Center',
@@ -216,21 +228,21 @@ exports.ordem = async (data, downTab) => {
                     margin: [0, 0, 0, 0],
                 },*/
                 {
-                    text: 'Ordem',
+                    text: '',
                     color: '#333333',
                     fontSize: 28,
                     bold: true,
                     alignment: 'right',
-                    margin: [0, 0, 0, -10]
+                    margin: [0, 0]
                     //absolutePosition: { x: 0, y: 100 },
                 },
                 '\n',
                 {
-                    text: `ID: ${data.orderID} \n Data emissão:\n ${new Date().toLocaleDateString('pt-PT')} \nPO No.`,
+                    text: `\n\n\n.`,
                     color: '#333333',
                     fontSize: 11,
                     alignment: 'right',
-                    margin: [0, 0, 0, -50]
+                    margin: [0, 0, 0, 0]
                     // absolutePosition: { x: 0, y: 120},
                     //absolutePosition: {x: 0, y: 70},
                 },
@@ -368,4 +380,14 @@ exports.ordem = async (data, downTab) => {
         //writeStream.end(callback)
     }
     )
+}
+
+function gerador(length) {
+    var result = '';
+    var characters = '0123456789';
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
 }

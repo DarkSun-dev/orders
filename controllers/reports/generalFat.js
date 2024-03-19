@@ -4,9 +4,9 @@ const path = require('path')
 const Client = require('../../models/clientModel')
 
 exports.generalFat = async (data) => {
+
     var options = { style: 'currency', currency: 'USD' }
     var form = new Intl.NumberFormat('en-US', options)
-
 
     var fonts = {
         Courier: {
@@ -73,7 +73,7 @@ exports.generalFat = async (data) => {
             '\n\n',
             {
                 lineHeight: 1.20,
-                text: ` Data de emissão: \n ${new Date().toLocaleDateString('pt-PT')} \n FAT No.:`,
+                text: ` Data de emissão: \n ${new Date().toLocaleDateString('pt-PT')} \n FAT No.: 00${data.invoiceID}`,
                 fontSize: 11,
                 color: '#333333',
                 alignment: 'right',

@@ -1,4 +1,6 @@
 const Ordem = require('../models/ordemModel')
+const Invoice = require('../models/invoiceModel')
+
 const myReport = require('./reports/ordem')
 const myReportb = require('./reports/invoiceReport')
 const myReportc = require('./reports/facture')
@@ -6,7 +8,12 @@ const myReportd = require('./reports/balance')
 const myReporte = require('./reports/generalFat')
 const myReportf = require('./reports/quote')
 
+async function invoiceNumeber(document) {
+    const doc = await Invoice.create(document)
+}
+
 exports.report = async (req, res) => {
+
     var options = { style: 'currency', currency: 'USD' }
     var form = new Intl.NumberFormat('en-US', options)
     var downTab = []
@@ -52,7 +59,7 @@ exports.report = async (req, res) => {
 
 
     for (let index = 0; index < req.body.designation.length; index++) {
-        row += "#" + req.body.designation[index].qty + " – " + req.body.designation[index].service + "; "
+        row += "#" + req.body.designation[index].qty + " – " + req.body.designation[index].service + ";"
     }
 
     setter.push([
@@ -236,10 +243,11 @@ exports.factura = async (req, res) => {
     ])
 
     //console.log(setter);
-
+    invoiceNumeber({ ordes: req.body.ordes })
     const report = await myReportc.facture({
         client: req.body.ordes[0].client,
         clientID: req.body.ordes[0].orderID,
+        invoiceID: req.body.invoiceID,
         Nuit: '',
         rows: setter,
         total: total
@@ -385,6 +393,7 @@ exports.balance = async (req, res) => {
 
 //========================================
 exports.generalFat = async (req, res) => {
+
     var setter = []
     var total = 0
 
@@ -452,9 +461,11 @@ exports.generalFat = async (req, res) => {
         }
     ])
 
+    invoiceNumeber({ ordes: req.body.ordes })
     const report = await myReporte.generalFat({
         client: req.body.ordes[0].client,
         clientID: req.body.ordes[0].orderID,
+        invoiceID: req.body.invoiceID,
         Nuit: '',
         vehicleID: req.body.ordes[0].vehicleID,
         orderID: req.body.ordes[0].orderID,
@@ -476,7 +487,6 @@ exports.generalFat = async (req, res) => {
 exports.quoteFat = async (req, res) => {
     var setter = []
     var total = 0
-
 
     setter.push([
         { text: 'Qty', style: 'tableHeader', bold: true },
@@ -546,7 +556,7 @@ exports.quoteFat = async (req, res) => {
         clientID: req.body.ordes[0].orderID,
         nuit: req.body.ordes[0].nuit,
         address: req.body.ordes[0].address,
-        vehicleID: req.body.ordes[0].vehicleID+"".toLowerCase(),
+        vehicleID: req.body.ordes[0].vehicleID + "".toLowerCase(),
         orderID: req.body.ordes[0].orderID,
         date: req.body.ordes[0].date,
         rows: setter,
