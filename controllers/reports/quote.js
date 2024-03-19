@@ -82,7 +82,7 @@ exports.quote = async (data) => {
             },
             {
                 lineHeight: 1.20,
-                text: data.docType === 'Factura' ? 'FAT No.:' : "Quot. No.: 00"+gerador(3),
+                text: data.docType === 'Factura' ? "FAT No.:"+data.docNum : data.docNum === '' ? "Quot. No.: 00"+gerador(3) : "Quot. No.:"+data.docNum,
                 fontSize: 11,
                 color: '#333333',
                 alignment: 'right',

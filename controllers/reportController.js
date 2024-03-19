@@ -558,6 +558,7 @@ exports.quoteFat = async (req, res) => {
         address: req.body.ordes[0].address,
         vehicleID: req.body.ordes[0].vehicleID + "".toLowerCase(),
         orderID: req.body.ordes[0].orderID,
+        docNum: req.body.docNum,
         date: req.body.ordes[0].date,
         rows: setter,
         docType: req.body.docType,
