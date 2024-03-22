@@ -378,7 +378,6 @@ exports.balance = async (req, res) => {
         }
     ])
 
-    //console.log(setter);
 
     const report = await myReportd.balance({
         client: req.body.ordes[0].client,
@@ -477,9 +476,6 @@ exports.generalFat = async (req, res) => {
         doc: report
     })
 }
-
-
-
 
 
 
