@@ -13,9 +13,14 @@ const invoiceSchema = new mongoose.Schema({
         enum: ['paid', 'non-paid', 'pending'],
         default: 'pending'
     },
+    entidade: {
+        type: String,
+    },
     ordes: Array
+}, {
+    timestamps: true
 })
 
-invoiceSchema.plugin(autoIncrement.plugin, { model: 'Invoice', field: 'invoiceID', startAt: 1 });
+invoiceSchema.plugin(autoIncrement.plugin, { model: 'Invoice', field: 'invoiceID', startAt: 275 });
 const Invoice = mongoose.model('Invoice', invoiceSchema)
 module.exports = Invoice

@@ -243,7 +243,7 @@ exports.factura = async (req, res) => {
     ])
 
     //console.log(setter);
-    invoiceNumeber({ ordes: req.body.ordes })
+    invoiceNumeber({ ordes: req.body.ordes, entidade: req.body.ordes[0].orderID})
     const report = await myReportc.facture({
         client: req.body.ordes[0].client,
         clientID: req.body.ordes[0].orderID,
@@ -461,7 +461,7 @@ exports.generalFat = async (req, res) => {
         }
     ])
 
-    invoiceNumeber({ ordes: req.body.ordes })
+    invoiceNumeber({ ordes: req.body.ordes, entidade: req.body.ordes[0].orderID })
     const report = await myReporte.generalFat({
         client: req.body.ordes[0].client,
         clientID: req.body.ordes[0].orderID,

@@ -2,15 +2,19 @@ const mongoose = require('mongoose')
 const itemSchema = new mongoose.Schema({
     service: {
         type: String, //order-user Telefone
-        required: true
+        required: true,
+        unique: true
     },
     unit_price: {
-        type: String, 
+        type: String,
         required: true
     },
     qty: {
-        type: String, 
+        type: String,
         required: true
+    },
+    stoke: {
+        type: Number
     },
     itemID: {
         type: String

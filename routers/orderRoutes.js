@@ -4,6 +4,7 @@ const clientController = require('./../controllers/clientController')
 const reportController = require('./../controllers/reportController')
 const registerController = require('./../controllers/registerController')
 const invoiceController = require('./../controllers/invoiceController')
+const stokeController = require('./../controllers/stokeController')
 const router = express.Router()
 
 router.get('/getOrdes/:id', clientController.getOrdes)
@@ -13,6 +14,8 @@ router.get('/getService/:id', clientController.getMyServices)
 router.get('/getOrdems', operationController.getOrdems)
 router.get('/verifyClient/:id', clientController.verifyClient)
 router.get('/getClients', clientController.getClients)
+router.get('/getInvoice', invoiceController.getInvoice)
+router.get('/getStoke', stokeController.getStoke)
 
 router.post('/getReport', reportController.report)
 router.post('/getInvoiceReport', reportController.invoiceReport)
@@ -25,17 +28,15 @@ router.post('/createService', operationController.addService)
 router.post('/ordeService', operationController.ordeService)
 router.post('/createClient', clientController.addClient)
 router.post('/saveInvoice', invoiceController.saveInvoice)
-router.get('/getInvoice', invoiceController.getInvoice)
-
 router.post('/ordemRegister', registerController.ordemRegister)
-
 router.post('/getOrdes', operationController.getOrdesByConditions)
-
 router.post('/rangeDate', reportController.rangeReport)
 router.post('/anyReport', reportController.anyReport)
+router.post('/updateStoke', stokeController.updateStoke)
 
 router.patch('/endOrdem/:id', operationController.endOrdem)
 router.patch('/updateClient/:id', clientController.updateClient)
+router.patch('/updateQty/:id', stokeController.updateQty)
 
 router.delete('/deleteClient/:id', clientController.deleteClient)
 router.delete('/removeService/:id', operationController.removeService)
