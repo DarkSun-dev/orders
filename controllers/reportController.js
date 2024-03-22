@@ -7,6 +7,7 @@ const myReportc = require('./reports/facture')
 const myReportd = require('./reports/balance')
 const myReporte = require('./reports/generalFat')
 const myReportf = require('./reports/quote')
+const myReportg = require('./reports/quotFat')
 
 async function invoiceNumeber(document) {
     const doc = await Invoice.create(document)
@@ -559,6 +560,92 @@ exports.quoteFat = async (req, res) => {
         rows: setter,
         docType: req.body.docType,
         total: total
+    })
+    res.send({
+        doc: report
+    })
+}
+
+
+//=========================Quot.Emmiter
+exports.quotFactura = async (req, res) => {
+    var setter = []
+    var total = 0
+
+
+    setter.push([
+        { text: 'Qty', style: 'tableHeader', bold: true },
+        { text: 'Item description', style: 'tableHeader', bold: true },
+        { text: 'Unit Price', style: 'tableHeader', bold: true },
+        { text: 'Total', style: 'tableHeader', bold: true }
+    ])
+
+    for (let i = 0; i < req.body.ordes.length; i++) {
+
+        for (let index = 0; index < req.body.ordes[i].designation.length; index++) {
+            var t = req.body.ordes[i].designation[index].unit_price
+            var el = parseInt(t)
+
+            var tb = req.body.ordes[i].designation[index].unit_price
+            var elb = parseInt(tb) * parseInt(req.body.ordes[i].designation[index].qty)
+
+            var options = { style: 'currency', currency: 'USD' }
+            var form = new Intl.NumberFormat('en-US', options)
+            var v = form.format(el)
+            var vb = form.format(elb)
+
+            setter.push([
+                {
+                    text: req.body.ordes[i].designation[index].qty,
+                    border: [true, false, false, false]
+                },
+                {
+                    text: req.body.ordes[i].vehicleID + " – " + req.body.ordes[i].designation[index].service + "\n",
+                    border: [true, false, false, false]
+                },
+                {
+                    text: v.slice(1) + "\n",
+                    border: [true, false, false, false]
+                },
+                {
+                    text: vb.slice(1) + "\n",
+                    border: [true, false, true, false]
+                }
+            ])
+
+            total = total + (parseInt(req.body.ordes[i].designation[index].unit_price) * parseInt(req.body.ordes[i].designation[index].qty))
+        }
+    }
+
+    setter.push([
+        {
+            text: '\n\n\n\n\n\n\n\n\n\n',
+            border: [true, false, true, true]
+        },
+        {
+            text: '\n\n\n\n\n\n\n\n\n\n',
+            border: [true, false, true, true]
+        },
+        {
+            text: '\n\n\n\n\n\n\n\n\n\n',
+            border: [true, false, true, true]
+        },
+        {
+            text: '\n\n\n\n\n\n\n\n\n\n',
+            border: [true, false, true, true]
+        }
+    ])
+
+    //console.log(setter);
+    //invoiceNumeber({ ordes: req.body.ordes, entidade: req.body.ordes[0].orderID})
+    const report = await myReportg.quotFat({
+        client: req.body.ordes[0].client,
+        clientID: req.body.ordes[0].orderID,
+        invoiceID: req.body.invoiceID,
+        Nuit: '',
+        rows: setter,
+        total: total,
+        iva: req.body.iva
     })
     res.send({
         doc: report
