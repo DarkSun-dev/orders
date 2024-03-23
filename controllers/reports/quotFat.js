@@ -63,7 +63,7 @@ exports.quotFat = async (data) => {
                 margin: [0, 0, 0, 0],
             },
             {
-                text: 'COTAÇÃO',
+                text: data.docType === 'fat' ? 'FACTURA \n PRO-FORMA' : data.docType === 'ord' ? 'Ordem' : `${data.docType}`.toUpperCase(),
                 color: '#333333',
                 fontSize: 11,
                 fontSize: 28,
@@ -74,9 +74,25 @@ exports.quotFat = async (data) => {
             '\n\n',
             {
                 lineHeight: 1.20,
-                text: ` Data: ${new Date().toLocaleDateString('pt-PT')} \n Qot No.: 00${data.invoiceID}`,
+                text: ` Data: ${new Date().toLocaleDateString('pt-PT')}`,
                 fontSize: 11,
                 color: '#333333',
+                alignment: 'right',
+                // absolutePosition: {x: 0, y: 70},
+            },
+            {
+                lineHeight: 1.20,
+                text: data.docType === 'ord' && data.docNum === '' ? "PO No.: 00"+gerador(2) : data.docType === 'ord' && data.docNum !== '' ? "PO No.: 00"+data.docNum : '',
+                fontSize: 11,
+                color: '#333333',
+                alignment: 'right',
+                // absolutePosition: {x: 0, y: 70},
+            },
+            {
+                lineHeight: 1.20,
+                text: data.docType === 'Factura' ? "FAT No.: 00"+data.docNum : data.docNum === '' ? "Qot. No.: 00"+data.invoiceID : "Qot. No.: 00"+data.docNum,
+                fontSize: 11,
+                color: data.docType === 'ord'? '#fff':'#333333',
                 alignment: 'right',
                 // absolutePosition: {x: 0, y: 70},
             },
@@ -177,4 +193,14 @@ const getAddress = async (orderID) => {
     if (doc.length == 0) { return '' } else {
         return doc[0].client_address
     }
+}
+
+function gerador(length) {
+    var result = '';
+    var characters = '0123456789';
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
 }

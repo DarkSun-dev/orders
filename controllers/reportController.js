@@ -638,10 +638,15 @@ exports.quotFactura = async (req, res) => {
 
     //console.log(setter);
     //invoiceNumeber({ ordes: req.body.ordes, entidade: req.body.ordes[0].orderID})
+    if(req.body.docType === 'Factura' && req.body.count === 'yes'){
+        invoiceNumeber({ ordes: req.body.ordes, entidade: req.body.ordes[0].orderID})
+    }
     const report = await myReportg.quotFat({
         client: req.body.ordes[0].client,
         clientID: req.body.ordes[0].orderID,
         invoiceID: req.body.invoiceID,
+        docType: req.body.docType,
+        docNum: req.body.docNum,
         Nuit: '',
         rows: setter,
         total: total,
