@@ -647,6 +647,7 @@ exports.quotFactura = async (req, res) => {
         invoiceID: req.body.invoiceID,
         docType: req.body.docType,
         docNum: req.body.docNum,
+        date: req.body.docDate,
         Nuit: '',
         rows: setter,
         total: total,

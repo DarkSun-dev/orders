@@ -16,6 +16,10 @@ const invoiceSchema = new mongoose.Schema({
     entidade: {
         type: String,
     },
+    year: {
+        type: Number,
+        default: new Date().getFullYear()
+    },
     ordes: Array
 }, {
     timestamps: true

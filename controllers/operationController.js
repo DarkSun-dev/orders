@@ -1,6 +1,7 @@
 const factory = require('./handlerFactory')
 const Ordem = require('../models/ordemModel')
 const Item = require('../models/itemModel')
+const Invoice = require('../models/invoiceModel')
 const myReportc = require('./reports/facture')
 const fs = require('fs')
 var Buffer = require('buffer/').Buffer
@@ -21,6 +22,7 @@ exports.getOrdesByConditions = async (req, res) => {
     var documentA = []
     var documentB = []
     var documentC = []
+    var invoice = []
 
     documentA = await Ordem.find({
         client_telefone: req.body.ordem
@@ -35,12 +37,26 @@ exports.getOrdesByConditions = async (req, res) => {
     documentC = await Ordem.find({
         vehicleID: req.body.ordem
     }).sort({ createdAt: -1, data: -1 })
-    Array.prototype.push.apply(doc, documentC);
+    Array.prototype.push.apply(doc, documentC); 
+
+    documentD = await Ordem.find({
+        orderID: req.body.ordem
+    }).sort({ createdAt: -1, data: -1 })
+    Array.prototype.push.apply(doc, documentD);
+
+    const w = doc.map(item => item.orderID)
+    const arr = Array.from(new Set(w))
+   
+    if(arr.length == 0){}else{
+        var r = await Invoice.find({ entidade: { $in: arr } }).sort({ createdAt: -1})
+        Array.prototype.push.apply(invoice, r)
+    }
 
     res.status(200).json({
         status: 'success',
         data: {
-            data: doc
+            data: doc,
+            invoices: invoice
         }
     })
 }

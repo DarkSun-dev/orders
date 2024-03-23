@@ -74,7 +74,7 @@ exports.quotFat = async (data) => {
             '\n\n',
             {
                 lineHeight: 1.20,
-                text: ` Data: ${new Date().toLocaleDateString('pt-PT')}`,
+                text: data.date === '' ? ` Data: ${new Date().toLocaleDateString('pt-PT')}`: "Data: "+data.date,
                 fontSize: 11,
                 color: '#333333',
                 alignment: 'right',
