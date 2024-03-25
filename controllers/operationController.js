@@ -47,7 +47,10 @@ exports.getOrdesByConditions = async (req, res) => {
     const w = doc.map(item => item.orderID)
     const arr = Array.from(new Set(w))
    
-    if(arr.length == 0){}else{
+    if(arr.length == 0){
+        var rv = await Invoice.find({ invoiceID: req.body.ordem }).sort({ createdAt: -1})
+        Array.prototype.push.apply(invoice, rv)
+    }else{
         var r = await Invoice.find({ entidade: { $in: arr } }).sort({ createdAt: -1})
         Array.prototype.push.apply(invoice, r)
     }

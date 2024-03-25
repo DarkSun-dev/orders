@@ -20,6 +20,7 @@ const invoiceSchema = new mongoose.Schema({
         type: Number,
         default: new Date().getFullYear()
     },
+    total: Number,
     ordes: Array
 }, {
     timestamps: true

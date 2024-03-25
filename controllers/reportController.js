@@ -1,5 +1,6 @@
 const Ordem = require('../models/ordemModel')
 const Invoice = require('../models/invoiceModel')
+const Note = require('../models/noteModel')
 
 const myReport = require('./reports/ordem')
 const myReportb = require('./reports/invoiceReport')
@@ -9,8 +10,14 @@ const myReporte = require('./reports/generalFat')
 const myReportf = require('./reports/quote')
 const myReportg = require('./reports/quotFat')
 
+
+
 async function invoiceNumeber(document) {
     const doc = await Invoice.create(document)
+}
+
+async function note(document) {
+    const doc = await Note.create(document)
 }
 
 exports.report = async (req, res) => {
@@ -244,7 +251,7 @@ exports.factura = async (req, res) => {
     ])
 
     //console.log(setter);
-    invoiceNumeber({ ordes: req.body.ordes, entidade: req.body.ordes[0].orderID})
+    invoiceNumeber({ ordes: req.body.ordes, entidade: req.body.ordes[0].orderID, total: total})
     const report = await myReportc.facture({
         client: req.body.ordes[0].client,
         clientID: req.body.ordes[0].orderID,
@@ -461,7 +468,7 @@ exports.generalFat = async (req, res) => {
         }
     ])
 
-    invoiceNumeber({ ordes: req.body.ordes, entidade: req.body.ordes[0].orderID })
+    invoiceNumeber({ ordes: req.body.ordes, entidade: req.body.ordes[0].orderID, total: total })
     const report = await myReporte.generalFat({
         client: req.body.ordes[0].client,
         clientID: req.body.ordes[0].orderID,
@@ -639,7 +646,7 @@ exports.quotFactura = async (req, res) => {
     //console.log(setter);
     //invoiceNumeber({ ordes: req.body.ordes, entidade: req.body.ordes[0].orderID})
     if(req.body.docType === 'Factura' && req.body.count === 'yes'){
-        invoiceNumeber({ ordes: req.body.ordes, entidade: req.body.ordes[0].orderID})
+        invoiceNumeber({ ordes: req.body.ordes, entidade: req.body.ordes[0].orderID, total: total})
     }
     const report = await myReportg.quotFat({
         client: req.body.ordes[0].client,
@@ -657,3 +664,6 @@ exports.quotFactura = async (req, res) => {
         doc: report
     })
 }
+
+
+//===============================================================================
