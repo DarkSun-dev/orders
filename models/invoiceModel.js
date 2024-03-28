@@ -10,8 +10,8 @@ const invoiceSchema = new mongoose.Schema({
     },
     invoice_status: {
         type: String,
-        enum: ['paid', 'non-paid', 'pending'],
-        default: 'pending'
+        enum: ['paid', 'non-paid', 'parcial-paid'],
+        default: 'non-paid'
     },
     entidade: {
         type: String,
@@ -21,11 +21,15 @@ const invoiceSchema = new mongoose.Schema({
         default: new Date().getFullYear()
     },
     total: Number,
+    due: {
+        type: Number,
+        default: 0
+    },
     ordes: Array
 }, {
     timestamps: true
 })
 
-invoiceSchema.plugin(autoIncrement.plugin, { model: 'Invoice', field: 'invoiceID', startAt: 275 });
+invoiceSchema.plugin(autoIncrement.plugin, { model: 'Invoice', field: 'invoiceID', startAt: process.env.FAT_INIT });
 const Invoice = mongoose.model('Invoice', invoiceSchema)
 module.exports = Invoice

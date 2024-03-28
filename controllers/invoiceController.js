@@ -3,25 +3,44 @@ const Invoice = require('../models/invoiceModel')
 const myReportg = require('./reports/quotFat')
 
 exports.getInvoice = async (req, res) => {
-    const doc = await Invoice.find().sort({ createdAt: -1})
+    const doc = await Invoice.find().sort({ createdAt: -1 })
     // SEND RESPONSE
     res.status(200).json({
-      status: 'success',
-      data: {
-        data: doc
-      }
+        status: 'success',
+        data: {
+            data: doc
+        }
     })
 }
 
-exports.getClientInvoices = async (req, res) => {
-  const doc = await Invoice.find({entidade: req.params.id}).sort({ createdAt: -1})
-  // SEND RESPONSE
-  res.status(200).json({
-    status: 'success',
-    data: {
-      data: doc
+exports.updateInvoiceStatus = async (req, res) => {
+    const doc = await Invoice.findOneAndUpdate({ invoiceID: req.params.id }, req.body, {
+        new: true,
+        runValidators: true
+    });
+
+    if (!doc) {
+        return next(new AppError('No document found with that ID', 404));
     }
-  })
+
+    res.status(200).json({
+        status: 'success',
+        data: {
+            data: doc
+        }
+    })
+}
+
+
+exports.getClientInvoices = async (req, res) => {
+    const doc = await Invoice.find({ entidade: req.params.id }).sort({ createdAt: -1 })
+    // SEND RESPONSE
+    res.status(200).json({
+        status: 'success',
+        data: {
+            data: doc
+        }
+    })
 }
 
 exports.saveInvoice = factory.createOne(Invoice)
@@ -96,17 +115,18 @@ exports.printInvoice = async (req, res) => {
     //console.log(setter);
 
     const report = await myReportg.quotFat({
-      client: req.body.ordes[0].client,
-      clientID: req.body.ordes[0].orderID,
-      invoiceID: req.body.invoiceID,
-      docType: req.body.docType,
-      docNum: req.body.docNum,
-      date: req.body.docDate,
-      Nuit: '',
-      rows: setter,
-      total: total,
-      iva: req.body.iva
-  })
+        client: req.body.ordes[0].client,
+        clientID: req.body.ordes[0].orderID,
+        invoiceID: req.body.invoiceID,
+        docType: req.body.docType,
+        docNum: req.body.docNum,
+        date: req.body.docDate,
+        Nuit: '',
+        rows: setter,
+        total: total,
+        iva: req.body.iva,
+        note: req.body.docNote
+    })
     res.send({
         doc: report
     })

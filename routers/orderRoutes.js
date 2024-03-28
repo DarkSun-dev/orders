@@ -40,6 +40,7 @@ router.post('/updateStoke', stokeController.updateStoke)
 router.patch('/endOrdem/:id', operationController.endOrdem)
 router.patch('/updateClient/:id', clientController.updateClient)
 router.patch('/updateQty/:id', stokeController.updateQty)
+router.patch('/updateInvoiceStatus/:id', invoiceController.updateInvoiceStatus)
 
 router.delete('/deleteClient/:id', clientController.deleteClient)
 router.delete('/removeService/:id', operationController.removeService)

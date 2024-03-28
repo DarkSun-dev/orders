@@ -74,7 +74,7 @@ exports.quotFat = async (data) => {
             '\n\n',
             {
                 lineHeight: 1.20,
-                text: data.date === '' ? ` Data: ${new Date().toLocaleDateString('pt-PT')}`: "Data: "+data.date,
+                text: data.date === '' ? ` Data: ${new Date().toLocaleDateString('pt-PT')}` : "Data: " + data.date,
                 fontSize: 11,
                 color: '#333333',
                 alignment: 'right',
@@ -82,7 +82,7 @@ exports.quotFat = async (data) => {
             },
             {
                 lineHeight: 1.20,
-                text: data.docType === 'ord' && data.docNum === '' ? "PO No.: 00"+gerador(2) : data.docType === 'ord' && data.docNum !== '' ? "PO No.: 00"+data.docNum : '',
+                text: data.docType === 'ord' && data.docNum === '' ? "PO No.: 00" + gerador(2) : data.docType === 'ord' && data.docNum !== '' ? "PO No.: 00" + data.docNum : '',
                 fontSize: 11,
                 color: '#333333',
                 alignment: 'right',
@@ -90,9 +90,9 @@ exports.quotFat = async (data) => {
             },
             {
                 lineHeight: 1.20,
-                text: data.docType === 'Factura' ? "FAT No.: 00"+data.docNum : data.docNum === '' ? "Qot. No.: 00"+data.invoiceID : "Qot. No.: 00"+data.docNum,
+                text: data.docType === 'Factura' ? "FAT No.: 00" + data.docNum : data.docNum === '' ? "Qot. No.: 00" + data.invoiceID : "Qot. No.: 00" + data.docNum,
                 fontSize: 11,
-                color: data.docType === 'ord'? '#fff':'#333333',
+                color: data.docType === 'ord' ? '#fff' : '#333333',
                 alignment: 'right',
                 // absolutePosition: {x: 0, y: 70},
             },
@@ -132,12 +132,15 @@ exports.quotFat = async (data) => {
                 ]
             },
             '\n',
-            { text: data.iva ? `Subtotal: ${form.format(data.total).slice(1)} MT \n IVA: ${form.format(data.total * 0.16).slice(1)} MT` : `Total: ${form.format(data.total).slice(1)} MT` , margin: [0, 10], alignment: 'right', fontSize: 11, },
-            { text: data.iva ? `Total: ${form.format((data.total * 0.16) + data.total).slice(1)} MT`: '', bold: true, margin: [0, 0], alignment: 'right', fontSize: 11, },
+            { text: data.iva ? `Subtotal: ${form.format(data.total).slice(1)} MT \n IVA: ${form.format(data.total * 0.16).slice(1)} MT` : `Total: ${form.format(data.total).slice(1)} MT`, margin: [0, 10], alignment: 'right', fontSize: 11, },
+            { text: data.iva ? `Total: ${form.format((data.total * 0.16) + data.total).slice(1)} MT` : '', bold: true, margin: [0, 0], alignment: 'right', fontSize: 11, },
             '\n\n\n',
             { text: 'Please contact us for more information about payment options.', bold: true, margin: [0, 0], fontSize: 11, },
             '\n',
             { text: 'Moza Conta: 2678621910001 NIB: 00340000 2678621910166', margin: [0, 0], fontSize: 11, },
+            '\n\n\n',
+            {text: data.note.show ? 'Obs.': '', bold: true},
+            { text: data.note.show ? data.note.note : '', fontSize: 10}
         ],
         styles: {
             notesTitle: {
